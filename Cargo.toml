@@ -1,0 +1,6 @@
+[workspace]
+members = ["kure2-sys"]
+resolver = "3"
+
+[workspace.dependencies]
+cudd-sys = "1.0.0"
