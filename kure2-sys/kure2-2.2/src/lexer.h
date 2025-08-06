@@ -2,9 +2,11 @@
 #define kure_yyHEADER_H 1
 #define kure_yyIN_HEADER 1
 
-#line 6 "lexer.h"
+#include "parser.h"
 
-#line 8 "lexer.h"
+// #line 6 "lexer.h"
+
+// #line 8 "lexer.h"
 
 #define  YY_INT_ALIGNED short int
 
@@ -38,7 +40,7 @@
 #if defined (__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
 
 /* C99 says to define __STDC_LIMIT_MACROS before including stdint.h,
- * if you want the limit (max/min) macros for int types. 
+ * if you want the limit (max/min) macros for int types.
  */
 #ifndef __STDC_LIMIT_MACROS
 #define __STDC_LIMIT_MACROS 1
@@ -55,7 +57,7 @@ typedef uint32_t flex_uint32_t;
 typedef signed char flex_int8_t;
 typedef short int flex_int16_t;
 typedef int flex_int32_t;
-typedef unsigned char flex_uint8_t; 
+typedef unsigned char flex_uint8_t;
 typedef unsigned short int flex_uint16_t;
 typedef unsigned int flex_uint32_t;
 
@@ -193,7 +195,7 @@ struct yy_buffer_state
 
     int yy_bs_lineno; /**< The line count. */
     int yy_bs_column; /**< The column count. */
-    
+
 	/* Whether to try to fill the input buffer when we reach the
 	 * end of it.
 	 */
@@ -283,9 +285,9 @@ YYSTYPE * kure_yyget_lval (yyscan_t yyscanner );
 void kure_yyset_lval (YYSTYPE * yylval_param ,yyscan_t yyscanner );
 
        YYLTYPE *kure_yyget_lloc (yyscan_t yyscanner );
-    
+
         void kure_yyset_lloc (YYLTYPE * yylloc_param ,yyscan_t yyscanner );
-    
+
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
  */
@@ -352,9 +354,9 @@ extern int kure_yylex \
 #undef YY_DECL
 #endif
 
-#line 133 "./lexer.l"
+// #line 133 "./lexer.l"
 
 
-#line 359 "lexer.h"
+// #line 359 "lexer.h"
 #undef kure_yyIN_HEADER
 #endif /* kure_yyHEADER_H */

@@ -3,6 +3,9 @@ name = "cudd2-sys"
 version = "0.1.0"
 edition = "2024"
 
+links = "cudd"
+
 [dependencies]
-glib-sys = { workspace = true }
-gmp-mpfr-sys = { workspace = true }
+
+[build-dependencies]
+fs_extra = { workspace = true }

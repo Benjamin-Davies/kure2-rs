@@ -2,19 +2,19 @@
 /* A Bison parser, made by GNU Bison 2.4.1.  */
 
 /* Skeleton implementation for Bison GLR parsers in C
-   
+
       Copyright (C) 2002, 2003, 2004, 2005, 2006 Free Software Foundation, Inc.
-   
+
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation, either version 3 of the License, or
    (at your option) any later version.
-   
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-   
+
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
@@ -27,7 +27,7 @@
    special exception, which will cause the skeleton and the resulting
    Bison output files to be licensed under the GNU General Public
    License without this special exception.
-   
+
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
@@ -52,21 +52,24 @@
 /* "%code top" blocks.  */
 
 /* Line 159 of glr.c  */
-#line 118 "./parser.y"
+// #line 118 "./parser.y"
 
 #define _GNU_SOURCE // We need vasprintf
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
 #include <KureImpl.h>
 #include <glib.h>
+#include "lexer.h"
+#include "parser.h"
 
 
 
 
 /* Line 159 of glr.c  */
-#line 70 "parser.c"
+// #line 70 "parser.c"
 /* Substitute the variable and function names.  */
 #define yyparse kure_yyparse
 #define yylex   kure_yylex
@@ -81,7 +84,7 @@
 
 
 /* Line 172 of glr.c  */
-#line 85 "parser.c"
+// #line 85 "parser.c"
 
 
 
@@ -116,11 +119,11 @@ static YYSTYPE yyval_default;
 
 
 /* Line 243 of glr.c  */
-#line 120 "parser.c"
+// #line 120 "parser.c"
 /* Unqualified %code blocks.  */
 
 /* Line 244 of glr.c  */
-#line 153 "./parser.y"
+// #line 153 "./parser.y"
 
   #include <glib.h>
 
@@ -141,11 +144,11 @@ static YYSTYPE yyval_default;
     _destroy_context(g_queue_pop_tail(contexts)); }
 #define PUSH_CONTEXT { g_queue_push_tail(contexts, _new_context());  }
 #define CONTEXT ((Context*)contexts->tail->data)
-  
+
 #define IS_DECLARED(name,type) _is_declared(CONTEXT, (name), (type))
 #define DECLARE(name,type) {if (_declare(CONTEXT, (name), (type)))	\
       { printf ("Warning: Object with name \"%s\" already defined!\n", name); }}
-  
+
   typedef struct fun_map_t fun_map_t;
 
   static void _destroy_decls (LocalDecl * self, void * dummy);
@@ -161,7 +164,7 @@ static YYSTYPE yyval_default;
 
 #define CONV(fmt,...) g_strdup_printf(fmt, __VA_ARGS__); _g_free_all(__VA_ARGS__, NULL);
 
-/* If you change the name here, you also have to change it in 
+/* If you change the name here, you also have to change it in
  * src/KureLuaBinding.c. */
 #define LINE_TRACKING_VAR "__line"
 
@@ -218,7 +221,7 @@ static YYSTYPE yyval_default;
 		   { "minsets_upset"  , 1, "kure.minsets_upset" },
 		   { "minsets",         1, "kure.minsets" },
 		   { "maxsets_downset", 1, "kure.maxsets_downset" },
-		   { "maxsets",         1, "kure.maxsets" },	   	   
+		   { "maxsets",         1, "kure.maxsets" },
 		   /* The following are also considered in the .l file because
 		    * they begin with a digit. */
 		   { "1-st",     1, "kure.compat.comp1" },
@@ -236,7 +239,7 @@ static YYSTYPE yyval_default;
 
 
 /* Line 244 of glr.c  */
-#line 240 "parser.c"
+// #line 240 "parser.c"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -1245,128 +1248,128 @@ yyuserAction (yyRuleNum yyn, int yyrhslen, yyGLRStackItem* yyvsp,
         case 2:
 
 /* Line 936 of glr.c  */
-#line 371 "./parser.y"
+// #line 371 "./parser.y"
     { g_queue_init(contexts); PUSH_CONTEXT; ;}
     break;
 
   case 4:
 
 /* Line 936 of glr.c  */
-#line 372 "./parser.y"
+// #line 372 "./parser.y"
     { g_string_assign(pcode, (((yyGLRStackItem const *)yyvsp)[YYFILL ((2) - (2))].yystate.yysemantics.yysval.code)); ;}
     break;
 
   case 5:
 
 /* Line 936 of glr.c  */
-#line 373 "./parser.y"
+// #line 373 "./parser.y"
     { KURE_YYERROR((*yylocp), "... in this expression."); YYERROR; ;}
     break;
 
   case 6:
 
 /* Line 936 of glr.c  */
-#line 375 "./parser.y"
+// #line 375 "./parser.y"
     { g_string_append (pcode, (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (1))].yystate.yysemantics.yysval.code)); g_free((((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (1))].yystate.yysemantics.yysval.code));  ;}
     break;
 
   case 7:
 
 /* Line 936 of glr.c  */
-#line 376 "./parser.y"
+// #line 376 "./parser.y"
     {  g_string_append (pcode, (((yyGLRStackItem const *)yyvsp)[YYFILL ((2) - (2))].yystate.yysemantics.yysval.code)); g_free((((yyGLRStackItem const *)yyvsp)[YYFILL ((2) - (2))].yystate.yysemantics.yysval.code)); ;}
     break;
 
   case 8:
 
 /* Line 936 of glr.c  */
-#line 380 "./parser.y"
+// #line 380 "./parser.y"
     { ((*yyvalp).code)=(((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (1))].yystate.yysemantics.yysval.code); if(o && o->onFunction) o->onFunction(o->object, ((*yyvalp).code), &(*yylocp)); ;}
     break;
 
   case 9:
 
 /* Line 936 of glr.c  */
-#line 381 "./parser.y"
+// #line 381 "./parser.y"
     { ((*yyvalp).code)=(((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (1))].yystate.yysemantics.yysval.code); if(o && o->onProgram) o->onProgram(o->object, ((*yyvalp).code), &(*yylocp)); ;}
     break;
 
   case 10:
 
 /* Line 936 of glr.c  */
-#line 386 "./parser.y"
+// #line 386 "./parser.y"
     { ((*yyvalp).code) = CONV ("\tif (kure.is_true(%s))\tthen\t%s\tend", (((yyGLRStackItem const *)yyvsp)[YYFILL ((2) - (5))].yystate.yysemantics.yysval.code), (((yyGLRStackItem const *)yyvsp)[YYFILL ((4) - (5))].yystate.yysemantics.yysval.code)); ;}
     break;
 
   case 11:
 
 /* Line 936 of glr.c  */
-#line 387 "./parser.y"
+// #line 387 "./parser.y"
     { ((*yyvalp).code) = CONV ("\tif (kure.is_true(%s))\tthen\t%s\telse %s\tend", (((yyGLRStackItem const *)yyvsp)[YYFILL ((2) - (7))].yystate.yysemantics.yysval.code), (((yyGLRStackItem const *)yyvsp)[YYFILL ((4) - (7))].yystate.yysemantics.yysval.code), (((yyGLRStackItem const *)yyvsp)[YYFILL ((6) - (7))].yystate.yysemantics.yysval.code)); ;}
     break;
 
   case 12:
 
 /* Line 936 of glr.c  */
-#line 388 "./parser.y"
+// #line 388 "./parser.y"
     { ((*yyvalp).code) = CONV("\twhile (kure.is_true(%s)) do\t%s\tend", (((yyGLRStackItem const *)yyvsp)[YYFILL ((2) - (5))].yystate.yysemantics.yysval.code), (((yyGLRStackItem const *)yyvsp)[YYFILL ((4) - (5))].yystate.yysemantics.yysval.code)); ;}
     break;
 
   case 13:
 
 /* Line 936 of glr.c  */
-#line 389 "./parser.y"
+// #line 389 "./parser.y"
     { ((*yyvalp).code) = CONV("\tkure.compat.assert(\"%s\",%s)", (((yyGLRStackItem const *)yyvsp)[YYFILL ((3) - (6))].yystate.yysemantics.yysval.code),(((yyGLRStackItem const *)yyvsp)[YYFILL ((5) - (6))].yystate.yysemantics.yysval.code)); ;}
     break;
 
   case 14:
 
 /* Line 936 of glr.c  */
-#line 393 "./parser.y"
-    { if( !_is_declared(CONTEXT, (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (1))].yystate.yysemantics.yysval.code), VAR)) 
+// #line 393 "./parser.y"
+    { if( !_is_declared(CONTEXT, (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (1))].yystate.yysemantics.yysval.code), VAR))
       { KURE_YYERROR((*yylocp), "Left hand side \"%s\" in assignment is not a local variable.", (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (1))].yystate.yysemantics.yysval.code)); YYERROR; } ;}
     break;
 
   case 15:
 
 /* Line 936 of glr.c  */
-#line 395 "./parser.y"
+// #line 395 "./parser.y"
     { ((*yyvalp).code) = CONV("\t%s = %s", (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (4))].yystate.yysemantics.yysval.code),(((yyGLRStackItem const *)yyvsp)[YYFILL ((4) - (4))].yystate.yysemantics.yysval.code)); ;}
     break;
 
   case 16:
 
 /* Line 936 of glr.c  */
-#line 397 "./parser.y"
+// #line 397 "./parser.y"
     { ((*yyvalp).code) = g_strdup_printf (" "LINE_TRACKING_VAR"=%d; %s", (*yylocp).first_line, (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (1))].yystate.yysemantics.yysval.code)); g_free ((((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (1))].yystate.yysemantics.yysval.code)); ;}
     break;
 
   case 17:
 
 /* Line 936 of glr.c  */
-#line 398 "./parser.y"
+// #line 398 "./parser.y"
     { ((*yyvalp).code) = g_strdup_printf (" "LINE_TRACKING_VAR"=%d; %s", (*yylocp).first_line, (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (2))].yystate.yysemantics.yysval.code)); g_free ((((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (2))].yystate.yysemantics.yysval.code)); ;}
     break;
 
   case 18:
 
 /* Line 936 of glr.c  */
-#line 401 "./parser.y"
+// #line 401 "./parser.y"
     { ((*yyvalp).code)=g_strdup(""); ;}
     break;
 
   case 19:
 
 /* Line 936 of glr.c  */
-#line 402 "./parser.y"
+// #line 402 "./parser.y"
     {  ((*yyvalp).code) = CONV("\t%s\n%s\n", (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (2))].yystate.yysemantics.yysval.code),(((yyGLRStackItem const *)yyvsp)[YYFILL ((2) - (2))].yystate.yysemantics.yysval.code)) ;}
     break;
 
   case 20:
 
 /* Line 936 of glr.c  */
-#line 404 "./parser.y"
-    { 
+// #line 404 "./parser.y"
+    {
   /* Check if the identifier is a RelView reserved function name. */
   if (_is_reserved_fun ((((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (4))].yystate.yysemantics.yysval.code))) {
     KURE_YYERROR((*yylocp), "Identifier \"%s\" in declarator is a reserved function name.", (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (4))].yystate.yysemantics.yysval.code));
@@ -1380,7 +1383,7 @@ yyuserAction (yyRuleNum yyn, int yyrhslen, yyGLRStackItem* yyvsp,
   case 23:
 
 /* Line 936 of glr.c  */
-#line 417 "./parser.y"
+// #line 417 "./parser.y"
     {
 	/* Check arguments and throw an error if at least one argument is missing. */
 	gchar * s = _check_args_code ((((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (3))].yystate.yysemantics.yysval.sig).name, (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (3))].yystate.yysemantics.yysval.sig).params);
@@ -1392,35 +1395,35 @@ yyuserAction (yyRuleNum yyn, int yyrhslen, yyGLRStackItem* yyvsp,
   case 24:
 
 /* Line 936 of glr.c  */
-#line 423 "./parser.y"
+// #line 423 "./parser.y"
     { KURE_YYERROR((*yylocp), "... in the expression of function \"%s\".", (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (3))].yystate.yysemantics.yysval.sig).name); g_free((((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (3))].yystate.yysemantics.yysval.sig).params); YYERROR; ;}
     break;
 
   case 25:
 
 /* Line 936 of glr.c  */
-#line 427 "./parser.y"
+// #line 427 "./parser.y"
     { ((*yyvalp).code) = CONV("%s\n\treturn %s\nend\n", (((yyGLRStackItem const *)yyvsp)[YYFILL ((2) - (5))].yystate.yysemantics.yysval.code),(((yyGLRStackItem const *)yyvsp)[YYFILL ((4) - (5))].yystate.yysemantics.yysval.code)); ;}
     break;
 
   case 26:
 
 /* Line 936 of glr.c  */
-#line 428 "./parser.y"
+// #line 428 "./parser.y"
     { KURE_YYERROR((*yylocp), "... in the statement(s) ..."); YYERROR;;}
     break;
 
   case 27:
 
 /* Line 936 of glr.c  */
-#line 429 "./parser.y"
+// #line 429 "./parser.y"
     { KURE_YYERROR((*yylocp), "... in the RETURN expression ..."); YYERROR; ;}
     break;
 
   case 28:
 
 /* Line 936 of glr.c  */
-#line 431 "./parser.y"
+// #line 431 "./parser.y"
     {
 	/* Check arguments and throw an error if at least one argument is missing. */
 	gchar * s = _check_args_code ((((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (2))].yystate.yysemantics.yysval.sig).name, (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (2))].yystate.yysemantics.yysval.sig).params);
@@ -1432,203 +1435,203 @@ yyuserAction (yyRuleNum yyn, int yyrhslen, yyGLRStackItem* yyvsp,
   case 29:
 
 /* Line 936 of glr.c  */
-#line 437 "./parser.y"
+// #line 437 "./parser.y"
     { PUSH_CONTEXT ;}
     break;
 
   case 30:
 
 /* Line 936 of glr.c  */
-#line 437 "./parser.y"
-    { 
+// #line 437 "./parser.y"
+    {
 	/* Check arguments and throw an error if at least one argument is missing. */
 	gchar * s = _check_args_code ((((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (5))].yystate.yysemantics.yysval.sig).name, (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (5))].yystate.yysemantics.yysval.sig).params);
 	gchar * line = g_strdup_printf ("%d", (*yylocp).first_line);
-	((*yyvalp).code) = CONV("function %s (%s)\nlocal "LINE_TRACKING_VAR"=%s\n%s\n%s\n%s\n", (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (5))].yystate.yysemantics.yysval.sig).name,(((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (5))].yystate.yysemantics.yysval.sig).params,line,s,(((yyGLRStackItem const *)yyvsp)[YYFILL ((4) - (5))].yystate.yysemantics.yysval.code),(((yyGLRStackItem const *)yyvsp)[YYFILL ((5) - (5))].yystate.yysemantics.yysval.code)); POP_CONTEXT 
+	((*yyvalp).code) = CONV("function %s (%s)\nlocal "LINE_TRACKING_VAR"=%s\n%s\n%s\n%s\n", (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (5))].yystate.yysemantics.yysval.sig).name,(((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (5))].yystate.yysemantics.yysval.sig).params,line,s,(((yyGLRStackItem const *)yyvsp)[YYFILL ((4) - (5))].yystate.yysemantics.yysval.code),(((yyGLRStackItem const *)yyvsp)[YYFILL ((5) - (5))].yystate.yysemantics.yysval.code)); POP_CONTEXT
 ;}
     break;
 
   case 31:
 
 /* Line 936 of glr.c  */
-#line 443 "./parser.y"
+// #line 443 "./parser.y"
     { PUSH_CONTEXT ;}
     break;
 
   case 32:
 
 /* Line 936 of glr.c  */
-#line 443 "./parser.y"
+// #line 443 "./parser.y"
     { KURE_YYERROR((*yylocp), "... in the DECL part of program \"%s\".", (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (5))].yystate.yysemantics.yysval.sig).name); g_free((((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (5))].yystate.yysemantics.yysval.sig).params); POP_CONTEXT; YYERROR; ;}
     break;
 
   case 33:
 
 /* Line 936 of glr.c  */
-#line 444 "./parser.y"
+// #line 444 "./parser.y"
     { KURE_YYERROR((*yylocp), "... of program \"%s\".", (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (2))].yystate.yysemantics.yysval.sig).name); g_free((((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (2))].yystate.yysemantics.yysval.sig).params); YYERROR; ;}
     break;
 
   case 34:
 
 /* Line 936 of glr.c  */
-#line 445 "./parser.y"
+// #line 445 "./parser.y"
     { PUSH_CONTEXT ;}
     break;
 
   case 35:
 
 /* Line 936 of glr.c  */
-#line 445 "./parser.y"
+// #line 445 "./parser.y"
     { KURE_YYERROR((*yylocp), "... of program \"%s\".", (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (5))].yystate.yysemantics.yysval.sig).name); g_free((((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (5))].yystate.yysemantics.yysval.sig).params); POP_CONTEXT; YYERROR; ;}
     break;
 
   case 38:
 
 /* Line 936 of glr.c  */
-#line 450 "./parser.y"
+// #line 450 "./parser.y"
     { ((*yyvalp).code) = strdup(""); ;}
     break;
 
   case 41:
 
 /* Line 936 of glr.c  */
-#line 454 "./parser.y"
+// #line 454 "./parser.y"
     { ((*yyvalp).code) = CONV("%s, %s", (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (3))].yystate.yysemantics.yysval.code), (((yyGLRStackItem const *)yyvsp)[YYFILL ((3) - (3))].yystate.yysemantics.yysval.code)); ;}
     break;
 
   case 43:
 
 /* Line 936 of glr.c  */
-#line 458 "./parser.y"
+// #line 458 "./parser.y"
     { ((*yyvalp).code) = CONV("(%s)", (((yyGLRStackItem const *)yyvsp)[YYFILL ((2) - (3))].yystate.yysemantics.yysval.code)) ;}
     break;
 
   case 45:
 
 /* Line 936 of glr.c  */
-#line 461 "./parser.y"
+// #line 461 "./parser.y"
     { ((*yyvalp).code)=CONV("kure.transpose(%s)", (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (1))].yystate.yysemantics.yysval.code)) ;}
     break;
 
   case 46:
 
 /* Line 936 of glr.c  */
-#line 462 "./parser.y"
+// #line 462 "./parser.y"
     { ((*yyvalp).code)=CONV("kure.mult_norm_transp(%s,%s)", (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (3))].yystate.yysemantics.yysval.code), (((yyGLRStackItem const *)yyvsp)[YYFILL ((3) - (3))].yystate.yysemantics.yysval.code)) ;}
     break;
 
   case 47:
 
 /* Line 936 of glr.c  */
-#line 463 "./parser.y"
+// #line 463 "./parser.y"
     { ((*yyvalp).code)=CONV("kure.mult_transp_norm(%s,%s)", (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (3))].yystate.yysemantics.yysval.code), (((yyGLRStackItem const *)yyvsp)[YYFILL ((3) - (3))].yystate.yysemantics.yysval.code)) ;}
     break;
 
   case 48:
 
 /* Line 936 of glr.c  */
-#line 464 "./parser.y"
+// #line 464 "./parser.y"
     { ((*yyvalp).code)=CONV("kure.mult_transp_transp(%s,%s)", (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (3))].yystate.yysemantics.yysval.code), (((yyGLRStackItem const *)yyvsp)[YYFILL ((3) - (3))].yystate.yysemantics.yysval.code)) ;}
     break;
 
   case 49:
 
 /* Line 936 of glr.c  */
-#line 465 "./parser.y"
+// #line 465 "./parser.y"
     { ((*yyvalp).code)=CONV("kure.mult(%s,%s)", (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (3))].yystate.yysemantics.yysval.code), (((yyGLRStackItem const *)yyvsp)[YYFILL ((3) - (3))].yystate.yysemantics.yysval.code)) ;}
     break;
 
   case 50:
 
 /* Line 936 of glr.c  */
-#line 468 "./parser.y"
+// #line 468 "./parser.y"
     { ((*yyvalp).code)=CONV("(%s)", (((yyGLRStackItem const *)yyvsp)[YYFILL ((2) - (3))].yystate.yysemantics.yysval.code)) ;}
     break;
 
   case 51:
 
 /* Line 936 of glr.c  */
-#line 469 "./parser.y"
+// #line 469 "./parser.y"
     { ((*yyvalp).code)=CONV("kure.right_tupling(%s,%s)", (((yyGLRStackItem const *)yyvsp)[YYFILL ((2) - (5))].yystate.yysemantics.yysval.code), (((yyGLRStackItem const *)yyvsp)[YYFILL ((4) - (5))].yystate.yysemantics.yysval.code)) ;}
     break;
 
   case 52:
 
 /* Line 936 of glr.c  */
-#line 470 "./parser.y"
+// #line 470 "./parser.y"
     { ((*yyvalp).code)=CONV("kure.left_tupling(%s,%s)", (((yyGLRStackItem const *)yyvsp)[YYFILL ((2) - (5))].yystate.yysemantics.yysval.code), (((yyGLRStackItem const *)yyvsp)[YYFILL ((4) - (5))].yystate.yysemantics.yysval.code)) ;}
     break;
 
   case 53:
 
 /* Line 936 of glr.c  */
-#line 471 "./parser.y"
+// #line 471 "./parser.y"
     { ((*yyvalp).code)=CONV("kure.tupling(%s,%s)", (((yyGLRStackItem const *)yyvsp)[YYFILL ((2) - (5))].yystate.yysemantics.yysval.code), (((yyGLRStackItem const *)yyvsp)[YYFILL ((4) - (5))].yystate.yysemantics.yysval.code)) ;}
     break;
 
   case 54:
 
 /* Line 936 of glr.c  */
-#line 472 "./parser.y"
+// #line 472 "./parser.y"
     { ((*yyvalp).code)=CONV("kure.land(%s,%s)", (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (3))].yystate.yysemantics.yysval.code), (((yyGLRStackItem const *)yyvsp)[YYFILL ((3) - (3))].yystate.yysemantics.yysval.code)) ;}
     break;
 
   case 55:
 
 /* Line 936 of glr.c  */
-#line 473 "./parser.y"
+// #line 473 "./parser.y"
     { ((*yyvalp).code)=CONV("kure.lor(%s,%s)", (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (3))].yystate.yysemantics.yysval.code), (((yyGLRStackItem const *)yyvsp)[YYFILL ((3) - (3))].yystate.yysemantics.yysval.code)) ;}
     break;
 
   case 56:
 
 /* Line 936 of glr.c  */
-#line 474 "./parser.y"
+// #line 474 "./parser.y"
     { ((*yyvalp).code)=CONV("kure.right_residue(%s,%s)", (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (3))].yystate.yysemantics.yysval.code), (((yyGLRStackItem const *)yyvsp)[YYFILL ((3) - (3))].yystate.yysemantics.yysval.code)) ;}
     break;
 
   case 57:
 
 /* Line 936 of glr.c  */
-#line 475 "./parser.y"
+// #line 475 "./parser.y"
     { ((*yyvalp).code)=CONV("kure.left_residue(%s,%s)", (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (3))].yystate.yysemantics.yysval.code), (((yyGLRStackItem const *)yyvsp)[YYFILL ((3) - (3))].yystate.yysemantics.yysval.code)) ;}
     break;
 
   case 58:
 
 /* Line 936 of glr.c  */
-#line 476 "./parser.y"
+// #line 476 "./parser.y"
     { ((*yyvalp).code)=CONV("kure.direct_sum(%s,%s)", (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (3))].yystate.yysemantics.yysval.code), (((yyGLRStackItem const *)yyvsp)[YYFILL ((3) - (3))].yystate.yysemantics.yysval.code)) ;}
     break;
 
   case 59:
 
 /* Line 936 of glr.c  */
-#line 477 "./parser.y"
+// #line 477 "./parser.y"
     { ((*yyvalp).code)=CONV("kure.complement(%s)", (((yyGLRStackItem const *)yyvsp)[YYFILL ((2) - (2))].yystate.yysemantics.yysval.code)) ;}
     break;
 
   case 62:
 
 /* Line 936 of glr.c  */
-#line 482 "./parser.y"
-    { 
+// #line 482 "./parser.y"
+    {
   const fun_map_t * ent = _lookup_reserved_fun ((((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (4))].yystate.yysemantics.yysval.code));
   if (ent) {
     if ((((yyGLRStackItem const *)yyvsp)[YYFILL ((3) - (4))].yystate.yysemantics.yysval.args).n != ent->arg_count) {
-      KURE_YYERROR((*yylocp), "Reserved function \"%s\" expects %d argument(s). Got %d.", 
+      KURE_YYERROR((*yylocp), "Reserved function \"%s\" expects %d argument(s). Got %d.",
 		   (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (4))].yystate.yysemantics.yysval.code), ent->arg_count, (((yyGLRStackItem const *)yyvsp)[YYFILL ((3) - (4))].yystate.yysemantics.yysval.args).n);
       _g_free_all ((((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (4))].yystate.yysemantics.yysval.code),(((yyGLRStackItem const *)yyvsp)[YYFILL ((3) - (4))].yystate.yysemantics.yysval.args).s,NULL);
       YYERROR;
     }
-    else { 
+    else {
       ((*yyvalp).code)=g_strdup_printf("%s(%s)", ent->transl_name,(((yyGLRStackItem const *)yyvsp)[YYFILL ((3) - (4))].yystate.yysemantics.yysval.args).s);
       _g_free_all ((((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (4))].yystate.yysemantics.yysval.code),(((yyGLRStackItem const *)yyvsp)[YYFILL ((3) - (4))].yystate.yysemantics.yysval.args).s,NULL);
     }
   }
   else /* Non reserved function, number of args unknown, or
-        * something like "random20". */ { 
+        * something like "random20". */ {
     gchar * mapped = map_fun ((((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (4))].yystate.yysemantics.yysval.code));
     ((*yyvalp).code) = CONV("%s(%s)", mapped, (((yyGLRStackItem const *)yyvsp)[YYFILL ((3) - (4))].yystate.yysemantics.yysval.args).s);
   }
@@ -1638,23 +1641,23 @@ yyuserAction (yyRuleNum yyn, int yyrhslen, yyGLRStackItem* yyvsp,
   case 63:
 
 /* Line 936 of glr.c  */
-#line 503 "./parser.y"
+// #line 503 "./parser.y"
     { ((*yyvalp).args).n = 0; ((*yyvalp).args).s = g_strdup (""); ;}
     break;
 
   case 65:
 
 /* Line 936 of glr.c  */
-#line 506 "./parser.y"
+// #line 506 "./parser.y"
     { ((*yyvalp).args).n = 1, ((*yyvalp).args).s = (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (1))].yystate.yysemantics.yysval.code); ;}
     break;
 
   case 66:
 
 /* Line 936 of glr.c  */
-#line 507 "./parser.y"
-    { ((*yyvalp).args).n = (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (3))].yystate.yysemantics.yysval.args).n + 1; 
-    ((*yyvalp).args).s = g_strconcat((((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (3))].yystate.yysemantics.yysval.args).s, ", ", (((yyGLRStackItem const *)yyvsp)[YYFILL ((3) - (3))].yystate.yysemantics.yysval.code), NULL); 
+// #line 507 "./parser.y"
+    { ((*yyvalp).args).n = (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (3))].yystate.yysemantics.yysval.args).n + 1;
+    ((*yyvalp).args).s = g_strconcat((((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (3))].yystate.yysemantics.yysval.args).s, ", ", (((yyGLRStackItem const *)yyvsp)[YYFILL ((3) - (3))].yystate.yysemantics.yysval.code), NULL);
     _g_free_all((((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (3))].yystate.yysemantics.yysval.args).s, (((yyGLRStackItem const *)yyvsp)[YYFILL ((3) - (3))].yystate.yysemantics.yysval.code), NULL);
   ;}
     break;
@@ -1662,69 +1665,69 @@ yyuserAction (yyRuleNum yyn, int yyrhslen, yyGLRStackItem* yyvsp,
   case 69:
 
 /* Line 936 of glr.c  */
-#line 514 "./parser.y"
+// #line 514 "./parser.y"
     { ((*yyvalp).code) = CONV("%s\n%s", (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (2))].yystate.yysemantics.yysval.code),(((yyGLRStackItem const *)yyvsp)[YYFILL ((2) - (2))].yystate.yysemantics.yysval.code)); ;}
     break;
 
   case 70:
 
 /* Line 936 of glr.c  */
-#line 515 "./parser.y"
+// #line 515 "./parser.y"
     { ((*yyvalp).code) = CONV("%s\n%s", (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (3))].yystate.yysemantics.yysval.code),(((yyGLRStackItem const *)yyvsp)[YYFILL ((2) - (3))].yystate.yysemantics.yysval.code)); ;}
     break;
 
   case 72:
 
 /* Line 936 of glr.c  */
-#line 518 "./parser.y"
+// #line 518 "./parser.y"
     { ((*yyvalp).code) = CONV("%s\n%s", (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (3))].yystate.yysemantics.yysval.code),(((yyGLRStackItem const *)yyvsp)[YYFILL ((3) - (3))].yystate.yysemantics.yysval.code)); ;}
     break;
 
   case 73:
 
 /* Line 936 of glr.c  */
-#line 520 "./parser.y"
+// #line 520 "./parser.y"
     { ((*yyvalp).code) = CONV("\tlocal %s", (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (1))].yystate.yysemantics.yysval.code)); ;}
     break;
 
   case 77:
 
 /* Line 936 of glr.c  */
-#line 526 "./parser.y"
+// #line 526 "./parser.y"
     { DECLARE((((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (1))].yystate.yysemantics.yysval.code), VAR); ((*yyvalp).code)=(((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (1))].yystate.yysemantics.yysval.code); ;}
     break;
 
   case 78:
 
 /* Line 936 of glr.c  */
-#line 530 "./parser.y"
+// #line 530 "./parser.y"
     {
 	 /* Check arguments and throw an error if at least one argument is missing. */
 	gchar * s = _check_args_code ((((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (3))].yystate.yysemantics.yysval.sig).name, (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (3))].yystate.yysemantics.yysval.sig).params);
-	
-	DECLARE((((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (3))].yystate.yysemantics.yysval.sig).name, FUN); 
-	((*yyvalp).code) = CONV("%s = function (%s) %s return %s end", (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (3))].yystate.yysemantics.yysval.sig).name,(((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (3))].yystate.yysemantics.yysval.sig).params,s,(((yyGLRStackItem const *)yyvsp)[YYFILL ((3) - (3))].yystate.yysemantics.yysval.code)); 
+
+	DECLARE((((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (3))].yystate.yysemantics.yysval.sig).name, FUN);
+	((*yyvalp).code) = CONV("%s = function (%s) %s return %s end", (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (3))].yystate.yysemantics.yysval.sig).name,(((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (3))].yystate.yysemantics.yysval.sig).params,s,(((yyGLRStackItem const *)yyvsp)[YYFILL ((3) - (3))].yystate.yysemantics.yysval.code));
 ;}
     break;
 
   case 79:
 
 /* Line 936 of glr.c  */
-#line 537 "./parser.y"
+// #line 537 "./parser.y"
     { DECLARE((((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (8))].yystate.yysemantics.yysval.code), DOM); ((*yyvalp).code) = CONV("%s = kure.direct_product_new(%s,%s)", (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (8))].yystate.yysemantics.yysval.code),(((yyGLRStackItem const *)yyvsp)[YYFILL ((5) - (8))].yystate.yysemantics.yysval.code),(((yyGLRStackItem const *)yyvsp)[YYFILL ((7) - (8))].yystate.yysemantics.yysval.code)); ;}
     break;
 
   case 80:
 
 /* Line 936 of glr.c  */
-#line 538 "./parser.y"
+// #line 538 "./parser.y"
     { DECLARE((((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (8))].yystate.yysemantics.yysval.code), DOM); ((*yyvalp).code) = CONV("%s = kure.direct_sum_new(%s,%s)", (((yyGLRStackItem const *)yyvsp)[YYFILL ((1) - (8))].yystate.yysemantics.yysval.code),(((yyGLRStackItem const *)yyvsp)[YYFILL ((5) - (8))].yystate.yysemantics.yysval.code),(((yyGLRStackItem const *)yyvsp)[YYFILL ((7) - (8))].yystate.yysemantics.yysval.code)); ;}
     break;
 
 
 
 /* Line 936 of glr.c  */
-#line 1728 "parser.c"
+// #line 1728 "parser.c"
       default: break;
     }
 
@@ -1747,7 +1750,7 @@ yyuserMerge (int yyn, YYSTYPE* yy0, YYSTYPE* yy1)
 
   switch (yyn)
     {
-      
+
       default: break;
     }
 }
@@ -1779,11 +1782,11 @@ yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep, YYLTYPE *yylocatio
       case 29: /* "START_DEFAULT" */
 
 /* Line 966 of glr.c  */
-#line 361 "./parser.y"
+// #line 361 "./parser.y"
 	{ /* Code */ };
 
 /* Line 966 of glr.c  */
-#line 1787 "parser.c"
+// #line 1787 "parser.c"
 	break;
 
       default:
@@ -3452,13 +3455,13 @@ yypdumpstack (yyGLRStack* yystackp)
 
 
 /* Line 2634 of glr.c  */
-#line 540 "./parser.y"
+// #line 540 "./parser.y"
 
 
 /* pcode is necessary but can be ignored. (See Bison Manual, Ch. 4.7)
  * The exact arguments depend on the parser type (GLR here) the use of locations
  * and additional parser argument (%parser-param, see above). */
-void kure_yyerror (YYLTYPE *ploc, yyscan_t scanner, GString * pcode, 
+void kure_yyerror (YYLTYPE *ploc, yyscan_t scanner, GString * pcode,
 		   const ParserObserver * o, GString * err, GQueue * stack ,
 		   const char * fmt, ...)
 {
@@ -3471,10 +3474,10 @@ void kure_yyerror (YYLTYPE *ploc, yyscan_t scanner, GString * pcode,
     if (ploc->first_line) {
       /* Use a simpler location if the error is on just one line. */
       if (ploc->first_line == ploc->last_line)
-	g_string_append_printf (err, "L%d.c%d-%d: ", ploc->first_line, 
+	g_string_append_printf (err, "L%d.c%d-%d: ", ploc->first_line,
 		 ploc->first_column, ploc->last_column);
-      else 
-	g_string_append_printf (err, "L%d.c%d-L%d.c%d: ", ploc->first_line, 
+      else
+	g_string_append_printf (err, "L%d.c%d-L%d.c%d: ", ploc->first_line,
 		 ploc->first_column, ploc->last_line, ploc->last_column);
     }
     g_string_append_vprintf (err, fmt, ap);
@@ -3484,10 +3487,10 @@ void kure_yyerror (YYLTYPE *ploc, yyscan_t scanner, GString * pcode,
     if (ploc->first_line) {
       /* Use a simpler location if the error is on just one line. */
       if (ploc->first_line == ploc->last_line)
-	fprintf (stderr, "L%d.c%d-%d: ", ploc->first_line, 
+	fprintf (stderr, "L%d.c%d-%d: ", ploc->first_line,
 		 ploc->first_column, ploc->last_column);
-      else 
-	fprintf (stderr, "L%d.c%d-L%d.c%d: ", ploc->first_line, 
+      else
+	fprintf (stderr, "L%d.c%d-L%d.c%d: ", ploc->first_line,
 		 ploc->first_column, ploc->last_line, ploc->last_column);
     }
     vfprintf(stderr, fmt, ap);
@@ -3515,7 +3518,7 @@ LocalDecl * _find_decl_with_name (GQueue/*Decl*/ * decls, const char * name) {
   return NULL;
 }
 
-void _destroy_context (Context * self) { 
+void _destroy_context (Context * self) {
   g_queue_foreach (&self->decls, (GFunc)_destroy_decls, NULL);
 }
 
@@ -3529,7 +3532,7 @@ int _is_declared (Context * c, const char * name, LocalDeclType type)
 LocalDecl * _declare(Context * c, const char * name, LocalDeclType type)
 {
   LocalDecl * l = _find_decl_with_name (&c->decls, name);
-    
+
   if (l) /* already declared. */
     return l;
   else {
@@ -3539,8 +3542,8 @@ LocalDecl * _declare(Context * c, const char * name, LocalDeclType type)
     g_queue_push_tail (&c->decls, l);
 
 #if 0
-    printf ("Declared \"%s\" with name \"%s\".\n", (type == VAR) 
-	    ? "VAR" : ((type == DOM) ? "Dom" : (type == FUN) 
+    printf ("Declared \"%s\" with name \"%s\".\n", (type == VAR)
+	    ? "VAR" : ((type == DOM) ? "Dom" : (type == FUN)
 		       ? "Fun" : "Unknown"), name);
 #endif
     return NULL;
@@ -3562,12 +3565,12 @@ void _g_free_all (void * p, ...)
 }
 
 /*!
- * Returns the internal (mapped) function name for the given RelView function. 
- * Frees fun or reuses it. Returns a newly alloced string which must be freed 
+ * Returns the internal (mapped) function name for the given RelView function.
+ * Frees fun or reuses it. Returns a newly alloced string which must be freed
  * using g_free. */
-char * map_fun (char * fun) 
+char * map_fun (char * fun)
 {
-  /* The following two patterns also match, e.g., "random10xyz" and 
+  /* The following two patterns also match, e.g., "random10xyz" and
    * "randomcf10xyz" */
   if (g_str_has_prefix(fun, "random") && !g_str_equal(fun, "randomperm") && !g_str_equal(fun, "random")) {
     int prob;
@@ -3595,7 +3598,7 @@ char * map_fun (char * fun)
 }
 
 /*!
- * Returns TRUE if the given function name is a RelView reserved function, 
+ * Returns TRUE if the given function name is a RelView reserved function,
  * e.g. "p-1" or "random99".
  */
 gboolean _is_reserved_fun (const gchar * name)
@@ -3661,9 +3664,8 @@ gchar * _check_args_code (const gchar * name, const gchar * params)
     }
     g_string_append (ret, "\t\terror(err)\n"
 		     "\tend\n");
-    
+
     g_strfreev (v);
     return g_string_free (ret, FALSE);
   }
 }
-

@@ -1,0 +1,11 @@
+[package]
+name = "kure2-lua-sys"
+version = "0.1.0"
+edition = "2024"
+
+links = "kure2-lua"
+
+[dependencies]
+
+[build-dependencies]
+fs_extra = { workspace = true }

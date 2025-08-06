@@ -2,19 +2,19 @@
 /* A Bison parser, made by GNU Bison 2.4.1.  */
 
 /* Skeleton interface for Bison GLR parsers in C
-   
+
       Copyright (C) 2002, 2003, 2004, 2005, 2006 Free Software Foundation, Inc.
-   
+
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation, either version 3 of the License, or
    (at your option) any later version.
-   
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-   
+
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
@@ -27,14 +27,16 @@
    special exception, which will cause the skeleton and the resulting
    Bison output files to be licensed under the GNU General Public
    License without this special exception.
-   
+
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
 /* "%code requires" blocks.  */
 
 /* Line 2638 of glr.c  */
-#line 129 "./parser.y"
+// #line 129 "./parser.y"
+
+#pragma once
 
   #include <glib.h>
 
@@ -54,7 +56,7 @@
 
 
 /* Line 2638 of glr.c  */
-#line 58 "parser.h"
+// #line 58 "parser.h"
 
 /* Tokens.  */
 #ifndef YYTOKENTYPE
@@ -91,7 +93,7 @@ typedef union YYSTYPE
 {
 
 /* Line 2638 of glr.c  */
-#line 146 "./parser.y"
+// #line 146 "./parser.y"
 
   gchar * code;
   Signature sig;
@@ -100,7 +102,7 @@ typedef union YYSTYPE
 
 
 /* Line 2638 of glr.c  */
-#line 104 "parser.h"
+// #line 104 "parser.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 #endif
@@ -122,7 +124,7 @@ typedef struct YYLTYPE
 /* "%code provides" blocks.  */
 
 /* Line 2638 of glr.c  */
-#line 266 "./parser.y"
+// #line 266 "./parser.y"
 
 #include <glib.h>
 
@@ -148,18 +150,14 @@ typedef struct
 #define KURE_YYERROR(loc, ...)						\
   kure_yyerror (&(loc), NULL/*scanner*/, NULL/*code*/, NULL/*observer*/, \
 		err, NULL/*stack*/,  __VA_ARGS__)
-  
-  void kure_yyerror (YYLTYPE * ploc, yyscan_t, GString*, const ParserObserver*, 
+
+  void kure_yyerror (YYLTYPE * ploc, yyscan_t, GString*, const ParserObserver*,
 		     GString * err, GQueue*, const char * fmt, ...);
 
 
 
 /* Line 2638 of glr.c  */
-#line 159 "parser.h"
+// #line 159 "parser.h"
 
 
-
-
-
-
-
+int kure_yyparse (yyscan_t yyscanner, GString * pcode, const ParserObserver * o, GString * err, GQueue/*Context**/ * contexts);

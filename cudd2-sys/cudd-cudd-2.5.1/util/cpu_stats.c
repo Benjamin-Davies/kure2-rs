@@ -3,7 +3,7 @@
 #include "util.h"
 
 
-#ifdef BSD
+#if defined(BSD) && !defined(__APPLE__)
 #include <sys/types.h>
 #include <sys/time.h>
 #include <sys/resource.h>
@@ -21,7 +21,7 @@ extern int end, etext, edata;
 void
 util_print_cpu_stats(FILE *fp)
 {
-#ifdef BSD
+#if defined(BSD) && !defined(__APPLE__)
     struct rusage rusage;
     struct rlimit rlp;
     long text, data, vm_limit, vm_soft_limit;
