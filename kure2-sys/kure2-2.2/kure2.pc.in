@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+ 
+Name: libkure2
+Description: Kiel University Relation Algebra Package
+Version: @PACKAGE_VERSION@
+Libs: ${libdir}/libkure2.a @CUDD_LIBS@ @GMP_LIBS@ @LUA_LIBS@ @GLIB_LIBS@
+Cflags: -I${includedir}/kure2 @CUDD_CFLAGS@ @GMP_CFLAGS@ @LUA_CFLAGS@ @GLIB_CFLAGS@

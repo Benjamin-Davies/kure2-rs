@@ -1,6 +1,9 @@
 [workspace]
-members = ["kure2-sys"]
+members = ["cudd2-sys", "kure2-sys"]
 resolver = "3"
 
 [workspace.dependencies]
-cudd-sys = "1.0.0"
+cudd2-sys = { path = "cudd2-sys" }
+glib-sys = "0.21.0"
+gmp-mpfr-sys = "1.6.5"
+kure2-sys = { path = "kure2-sys" }

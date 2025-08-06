@@ -1,0 +1,61 @@
+/*
+ * KureCudd.h.in / KureCudd.h
+ *
+ *  Copyright (C) 2010 Stefan Bolus, University of Kiel, Germany
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+
+/*!
+ * \attention The file KureCudd.h is automatically generated from
+ * KureCudd.h.in.
+ */
+
+#ifndef KURECUDD_H_
+#define KURECUDD_H_
+
+#ifdef _CUDD
+#  error "It seems as if cudd.h was already included."
+#endif
+
+#define SIZEOF_INT 4
+#define SIZEOF_LONG 8
+#define SIZEOF_VOID_P 8
+
+/*!
+ * \internal
+ *
+ * For Cudd to work correctly, we have to pass exactly the same values to
+ * cudd.h which were used to compile Cudd in the first place (see Cudd's
+ * Makefile). If not defined, default values are used (see cudd.h) which
+ * can be wrong in some situations. */
+#if !defined SIZEOF_VOID_P || !defined SIZEOF_INT || !defined SIZEOF_LONG
+# error SIZEOF_VOID_P and/or SIZEOF_INT and/or SIZEOF_LONG undefined. Required by cudd.h.
+#endif
+
+#include <cudd.h>
+
+
+/*!
+ * \internal
+ *
+ * Define _KURE_USE_CUDD_INTERNALS to include the cudd internals. E.g.
+ * \ref cuddUniqueInter.
+ */
+#ifdef _KURE_USE_CUDD_INTERNALS
+#  include <cuddInt.h>
+#endif
+
+#endif /* KURECUDD_H_ */

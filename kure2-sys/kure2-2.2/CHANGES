@@ -1,0 +1,103 @@
+Aug. 2012:
+	* Implemented kure_left_tupling and kure_right_tupling. These are available
+	  as [|R,S] and [R,S|], respectively, in the Relview programming language.
+	  Added regression tests.
+	* Added shell example in examples/shell. Its main purpose, however, is to 
+	  test specific features of the library and the domain-specific language.
+ 	* Release of version 2.1.
+	* Fixed some compiler warnings, e.g. casting constant pointers.
+	* Changed maintainer to rub.
+	* The SVN code base has been moved to sourceforge.net.
+	* Added functions kure_minsets_upset, kure_minset, kure_maxsets_downset and
+	  kure_maxsets to the public interface. These functions can be used to
+	  obtain the minimal and maximal, resp., elements from a vector with 2^n
+	  rows, for some n, and exactly one column. The functions have ROBDD
+	  implementations and, therefore, are much faster than relation algebraic
+	  counterparts.  
+
+July 2012:
+	* Added function random(R,S) to Relview's programming language. The return
+	  value is a new relation with the same dimension as R and each bit is
+	  set with probability |S| / (rows(S) x cols(S)).
+	* Added a simple test case for counting entries in a relation. (check/main.c)
+
+Sept. 2011:
+	* Fixed bug in kure.mult_transp_transp which caused wrong results. The
+	  problem was located in mult_rel_transp_transp (relationCompose.c).
+	  Regression tests were added.
+	* Fixed problem with functions/programs without parameters. The generated
+	  Lua code to check the arguments were wrong for empty parameter lists. See
+	  _check_args_code in parse.y for details.
+	* Fixed problem with init(v) operation in the DSL which manipulated its
+	  argument v instead of returning a new element. Added kure.compat.init
+	  as a wrapper to kure.vec_begin. See file kure_compat.lua.
+
+May 2011:
+	* Added Queens-Problem test to the regressions tests after a problem with
+	  the minterm counting routines. The problem still exists on 64-bit 
+	  machines. See rvBddCountMinterm(...) in src/bdd/bddMinterm.c. The problem
+	  does not appear with CUDD version 2.3.1.  
+
+March 2011:
+	* Lua is now linked statically using '-Wl,-L:...' linker option
+	   (configure.ac).
+
+Feb. 2011:
+	* Added functions kure_dom_get_comp_count an kure_dom_get_comp to obtain
+	  the number of components of a given domain and the size of a particular 
+	  component, respectively.
+	* Implemented missing functions s-ord (kure_product_order) and p-ord
+	  (kure_sum_order).
+	* Implemented missing functions part-f (kure_partial_funcs) and tot-f
+	  (kure_total_funcs).
+	* Implemented missing functions 1-st and 2-nd to obtain the first two 
+	  components of a domain.
+	* Fixed bug in kure_random_no_cycles.
+	* Fixed bug in kure_is_univalent.
+	* Added numerous regression tests.
+	* Fixed curious bug in next_vector (kure_vec_next).
+	* Added missing documentation for kure_vec_point in Kure.h.
+	* Fixed bug in kure_rel_assign_from_string.
+	* Fixed bug in kure_mult_norm_transp.
+	* Fixed wrong parameter in kure.compat.randomperm (kure_compat.lua).
+	* Fixed wrong parameter order for kure_left_residue and kure_right_residue.
+	* Fixed bug in kure_is_row_complete_si.
+
+Nov. 2010:
+ 	* A newly created KureContext object now has a reference count of zero
+ 	  instead of one.
+ 	* Removed debug output.
+ 	* Fixed a bug in next_bdd (bddRelation.c).
+	* Removed src/bdd/bddFileops.c.
+	* Removed unnecessary CUDD wrapper function in src/bdd/bdd.c. 
+	* Removed unnecessary code from various files.
+	* Distribution can now be build in a separate directory.
+	* A stack trace is now added to every error message in Lua and DSL code, 
+	  resp.
+	* For functions and programs in DSL code, the number of arguments is
+	  checked now. This crucially simplifies finding programming mistakes.
+	* Line numbers of original DSL code are now stored in Lua code. They are
+	  indispensable in error message displayed to the user because the mapping
+	  into Lua code is ought to be transparent for the user. See src/parser.y.
+	* Added kure.traceback function which is essentially a copy of the 
+	  debug.traceback function provided by Lua itself. However, this function
+	  uses the line numbers stored in Lua code generated from DSL code. See
+	  src/KureLuaBinding.c.
+	* kure_lang_load_file (src/KureLangBinding.c) now uses the original file
+	  name as the chunk name. This enhances readability of stack traces.
+	* kure_lang_load (src/KureLangBinding.c) now uses the original DSL code
+	  as chunk name instead of the generated Lua code.
+	* Added two examples. See examples/ directory.
+	* Fixed the default random number generator on SunOS. See 
+	  src/KureContext.c.
+	* Added missing declaration of kure_random_perm. See include/Kure.h.
+	* Added test cases for kure_random_* functions. See check/kure_random.c.
+	* Updated m4/cudd.m4. There was an error with CUDD's C++ interface.
+
+Oct. 2010:
+	* Added eval() function to LUA binding.
+	* Altered dump() and info() such that they now return strings instead of
+	  writing them to standard output.
+	* Kure2 can now be compiled on Darwin.
+	* The parser now accepts comments of the form {...} or even {}. Previously,
+	  "{*" was used to begin a comment and "*}" to end it.

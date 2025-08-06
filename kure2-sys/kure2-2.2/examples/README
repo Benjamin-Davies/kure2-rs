@@ -1,0 +1,24 @@
+This directory contains the following examples:
+
+basic.c:		Demonstrates how to create a relation and how to access
+				separate entries.
+				
+dsl.c
+Hamilton.prog:	Creates a random homogeneous relation (a graph), loads an
+				external file in the domain-specific programming language (DSL)
+				and computes a Hamilton path for the graph. Optionally, the
+				result is written to a file in DOT (Graphviz) format.
+				
+				Demonstrates the following:
+					* Create a random relation
+					* Use the GNU MP arbitrary size integers with Kure2.
+					* Create a Lua state.
+					* Load a file containing DSL code into it.
+					* Load an existing relation into it.
+					* Execute a DSL expression.
+
+dsl_to_lua.c: 	Given some input files in the domain-specific programming
+				language it generates Lua code for them.
+				
+				Demonstrates how to parse a file with DSL code and how to use
+				the parser callbacks (KureParserObserver).

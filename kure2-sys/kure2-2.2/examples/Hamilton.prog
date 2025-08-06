@@ -1,0 +1,28 @@
+{************************************************************
+Computation of a hamiltonian circuit of a directed graph if
+it exists. Otherwise the result is empty. The program uses 
+the backtracking approach as presented by A. Srivastav in 
+the Fortgeschrittenenpraktikum at Kiel University, SS 1999
+************************************************************}
+
+Ham(R,v,m,s)
+  DECL n, w, p, res
+  BEG  res = O(R);
+       n = m | v;
+       IF empty(-n) 
+         THEN IF incl(s,R^*v) THEN res = v * s^ FI
+         ELSE w = R^ * v & -n;
+              WHILE -empty(w) & empty(res) DO
+                p = point(w);
+                w = w & -p;
+                res = Ham(R,p,n,s) 
+                OD;
+                IF -empty(res) THEN res = v * p^ | res FI FI
+       RETURN res 
+  END.
+
+Hamilton(R) 
+  DECL p
+  BEG  p = point(Ln1(R))
+       RETURN Ham(R,p,O(p),p)
+  END.

@@ -1,0 +1,8 @@
+[package]
+name = "cudd2-sys"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+glib-sys = { workspace = true }
+gmp-mpfr-sys = { workspace = true }
