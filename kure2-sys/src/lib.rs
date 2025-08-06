@@ -9,3 +9,18 @@ use libc::*;
 use va_list::VaList as va_list;
 
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
+
+#[cfg(test)]
+mod tests {
+    use crate::{kure_context_destroy, kure_context_new};
+
+    #[test]
+    fn test_create_destroy_context() {
+        unsafe {
+            let context = kure_context_new();
+            assert!(!context.is_null());
+
+            kure_context_destroy(context);
+        }
+    }
+}

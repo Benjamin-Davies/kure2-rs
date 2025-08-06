@@ -51,5 +51,10 @@ fn main() {
         .write_to_file(out_path.join("bindings.rs"))
         .unwrap();
 
-    println!("cargo::metadata=dir={}", build_dir.display())
+    println!("cargo::metadata=dir={}", build_dir.display());
+    println!(
+        "cargo:rustc-link-search={}",
+        build_dir.join("src/.libs").display()
+    );
+    println!("cargo:rustc-link-lib=kure2");
 }

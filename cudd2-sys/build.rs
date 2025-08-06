@@ -32,5 +32,22 @@ fn main() {
         .write_to_file(out_path.join("bindings.rs"))
         .unwrap();
 
-    println!("cargo::metadata=dir={}", build_dir.display())
+    println!("cargo::metadata=dir={}", build_dir.display());
+    println!(
+        "cargo:rustc-link-search={}",
+        build_dir.join("cudd").display()
+    );
+    println!("cargo:rustc-link-lib=cudd");
+    println!(
+        "cargo:rustc-link-search={}",
+        build_dir.join("mtr").display()
+    );
+    println!("cargo:rustc-link-lib=mtr");
+    println!("cargo:rustc-link-search={}", build_dir.join("st").display());
+    println!("cargo:rustc-link-lib=st");
+    println!(
+        "cargo:rustc-link-search={}",
+        build_dir.join("util").display()
+    );
+    println!("cargo:rustc-link-lib=util");
 }

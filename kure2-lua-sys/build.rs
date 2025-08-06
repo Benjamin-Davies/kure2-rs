@@ -42,4 +42,9 @@ fn main() {
 
     println!("cargo::metadata=dir={}", build_dir.display());
     println!("cargo::metadata=pc={}", pc_file.display());
+    println!(
+        "cargo:rustc-link-search={}",
+        build_dir.join("lib").display()
+    );
+    println!("cargo:rustc-link-lib=lua");
 }
