@@ -23,7 +23,6 @@ fn main() {
         .header("wrapper.h")
         .clang_arg(format!("-I{}", build_dir.join("include").display()))
         .blocklist_file(".*/usr/.*")
-        .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
         .generate()
         .unwrap();
 

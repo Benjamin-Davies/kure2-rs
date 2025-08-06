@@ -31,7 +31,6 @@ fn main() {
     let bindings = bindgen::Builder::default()
         .header(build_dir.join("include/lua.h").to_str().unwrap())
         .blocklist_file(".*/usr/.*")
-        .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
         .generate()
         .unwrap();
 

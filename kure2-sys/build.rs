@@ -42,7 +42,6 @@ fn main() {
         .blocklist_file(".*/cudd.h")
         .blocklist_file(".*/gmp.h")
         .blocklist_file(".*/lua.h")
-        .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
         .generate()
         .unwrap();
 
