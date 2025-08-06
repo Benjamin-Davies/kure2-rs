@@ -11,13 +11,26 @@ fn main() {
     println!("cargo:rerun-if-changed=build.rs");
     println!("cargo:rerun-if-changed={}", src_dir.display());
 
-    fs_extra::copy_items(&[&src_dir], out_dir, &CopyOptions::new().overwrite(true)).unwrap();
+    fs_extra::copy_items(&[&src_dir], &out_dir, &CopyOptions::new().overwrite(true)).unwrap();
 
     let status = Command::new("make")
         .current_dir(&build_dir)
         .status()
         .unwrap();
     assert!(status.success());
+
+    let bindings = bindgen::Builder::default()
+        .header("wrapper.h")
+        .clang_arg(format!("-I{}", build_dir.join("include").display()))
+        .blocklist_file(".*/usr/.*")
+        .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
+        .generate()
+        .unwrap();
+
+    let out_path = PathBuf::from(&out_dir);
+    bindings
+        .write_to_file(out_path.join("bindings.rs"))
+        .unwrap();
 
     println!("cargo::metadata=dir={}", build_dir.display())
 }

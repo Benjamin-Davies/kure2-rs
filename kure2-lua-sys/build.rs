@@ -12,7 +12,7 @@ fn main() {
     println!("cargo:rerun-if-changed=build.rs");
     println!("cargo:rerun-if-changed={}", src_dir.display());
 
-    fs_extra::copy_items(&[&src_dir], out_dir, &CopyOptions::new().overwrite(true)).unwrap();
+    fs_extra::copy_items(&[&src_dir], &out_dir, &CopyOptions::new().overwrite(true)).unwrap();
 
     let status = Command::new("make")
         .arg("generic")
@@ -27,6 +27,18 @@ fn main() {
         writeln!(pc_file, "prefix={}", build_dir.display()).unwrap();
         pc_file.write(include_bytes!("lua.pc")).unwrap();
     }
+
+    let bindings = bindgen::Builder::default()
+        .header(build_dir.join("include/lua.h").to_str().unwrap())
+        .blocklist_file(".*/usr/.*")
+        .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
+        .generate()
+        .unwrap();
+
+    let out_path = PathBuf::from(&out_dir);
+    bindings
+        .write_to_file(out_path.join("bindings.rs"))
+        .unwrap();
 
     println!("cargo::metadata=dir={}", build_dir.display());
     println!("cargo::metadata=pc={}", pc_file.display());

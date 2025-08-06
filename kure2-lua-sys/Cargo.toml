@@ -1,11 +1,14 @@
 [package]
 name = "kure2-lua-sys"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
 
 links = "kure2-lua"
 
 [dependencies]
+libc = { workspace = true }
+va_list = { workspace = true }
 
 [build-dependencies]
+bindgen = { workspace = true }
 fs_extra = { workspace = true }

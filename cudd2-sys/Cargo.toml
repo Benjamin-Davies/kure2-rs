@@ -1,11 +1,13 @@
 [package]
 name = "cudd2-sys"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
 
 links = "cudd"
 
 [dependencies]
+libc = { workspace = true }
 
 [build-dependencies]
+bindgen = { workspace = true }
 fs_extra = { workspace = true }

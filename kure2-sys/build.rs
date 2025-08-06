@@ -3,15 +3,17 @@ use std::{path::PathBuf, process::Command};
 use fs_extra::dir::CopyOptions;
 
 fn main() {
-    println!("cargo:rerun-if-changed=build.rs");
-
     let manifest_dir: PathBuf = std::env::var("CARGO_MANIFEST_DIR").unwrap().into();
     let src_dir = manifest_dir.join("kure2-2.2");
     let out_dir: PathBuf = std::env::var("OUT_DIR").unwrap().into();
     let build_dir = out_dir.join("kure2-2.2");
 
+    println!("cargo:rerun-if-changed=build.rs");
+    println!("cargo:rerun-if-changed={}", src_dir.display());
+
     let cudd_dir: PathBuf = std::env::var("DEP_CUDD_DIR").unwrap().into();
     let gmp_dir: PathBuf = std::env::var("DEP_GMP_OUT_DIR").unwrap().into();
+    let lua_dir: PathBuf = std::env::var("DEP_KURE2_LUA_DIR").unwrap().into();
     let lua_pc: PathBuf = std::env::var("DEP_KURE2_LUA_PC").unwrap().into();
 
     fs_extra::copy_items(&[&src_dir], &out_dir, &CopyOptions::new().overwrite(true)).unwrap();
@@ -30,4 +32,24 @@ fn main() {
         .status()
         .unwrap();
     assert!(status.success());
+
+    let bindings = bindgen::Builder::default()
+        .header(build_dir.join("include/Kure.h").to_str().unwrap())
+        .clang_arg(format!("-I{}", cudd_dir.join("include").display()))
+        .clang_arg(format!("-I{}", gmp_dir.join("include").display()))
+        .clang_arg(format!("-I{}", lua_dir.join("include").display()))
+        .blocklist_file(".*/usr/.*")
+        .blocklist_file(".*/cudd.h")
+        .blocklist_file(".*/gmp.h")
+        .blocklist_file(".*/lua.h")
+        .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
+        .generate()
+        .unwrap();
+
+    let out_path = PathBuf::from(&out_dir);
+    bindings
+        .write_to_file(out_path.join("bindings.rs"))
+        .unwrap();
+
+    println!("cargo::metadata=dir={}", build_dir.display())
 }
