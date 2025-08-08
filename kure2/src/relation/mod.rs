@@ -14,38 +14,32 @@ pub struct Relation<'ctx> {
 impl Relation<'static> {
     /// Creates an empty relation with the given number of rows and columns in the given [`Context`].
     pub fn empty(rows: &rug::Integer, cols: &rug::Integer) -> Self {
-        let ctx = context();
-        Self::empty_with_context(ctx, rows, cols)
+        Self::empty_with_context(context(), rows, cols)
     }
 
     /// Creates an empty relation with the given number of rows and columns in the given [`Context`].
     pub fn empty_i32(rows: i32, cols: i32) -> Self {
-        let ctx = context();
-        Self::empty_i32_with_context(ctx, rows, cols)
+        Self::empty_i32_with_context(context(), rows, cols)
     }
 
     /// Creates an identity relation with the given size in the given [`Context`].
     pub fn identity(size: &rug::Integer) -> Self {
-        let ctx = context();
-        Self::identity_with_context(ctx, size)
+        Self::identity_with_context(context(), size)
     }
 
     /// Creates an identity relation with the given size in the given [`Context`].
     pub fn identity_i32(size: i32) -> Self {
-        let ctx = context();
-        Self::identity_i32_with_context(ctx, size)
+        Self::identity_i32_with_context(context(), size)
     }
 
     /// Creates a universal relation with the given number of rows and columns in the given [`Context`].
     pub fn all(rows: &rug::Integer, cols: &rug::Integer) -> Self {
-        let ctx = context();
-        Self::all_with_context(ctx, rows, cols)
+        Self::all_with_context(context(), rows, cols)
     }
 
     /// Creates a universal relation with the given number of rows and columns in the given [`Context`].
     pub fn all_i32(rows: i32, cols: i32) -> Self {
-        let ctx = context();
-        Self::all_i32_with_context(ctx, rows, cols)
+        Self::all_i32_with_context(context(), rows, cols)
     }
 }
 
@@ -127,6 +121,16 @@ impl Relation<'_> {
         if success == 0 {
             self.ctx.panic_with_error();
         }
+    }
+}
+
+impl Clone for Relation<'_> {
+    fn clone(&self) -> Self {
+        let ptr = unsafe { ffi::kure_rel_new_copy(self.ptr) };
+        if ptr.is_null() {
+            self.ctx.panic_with_error();
+        }
+        Self { ptr, ctx: self.ctx }
     }
 }
 
@@ -298,5 +302,16 @@ mod tests {
                 assert!(relation.bit_i32(i, j));
             }
         }
+    }
+
+    #[test]
+    fn test_clone() {
+        let mut relation = Relation::empty_i32(3, 4);
+        relation.set_bit_i32(1, 2, true);
+
+        let cloned = relation.clone();
+
+        assert!(cloned.bit_i32(1, 2));
+        assert!(!cloned.bit_i32(0, 0));
     }
 }

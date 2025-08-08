@@ -14,6 +14,7 @@ fn main() {
     let cudd_dir: PathBuf = std::env::var("DEP_CUDD_DIR").unwrap().into();
     let gmp_dir: PathBuf = std::env::var("DEP_GMP_OUT_DIR").unwrap().into();
     let lua_dir: PathBuf = std::env::var("DEP_KURE2_LUA_DIR").unwrap().into();
+    let lua_luac: PathBuf = std::env::var("DEP_KURE2_LUA_LUAC").unwrap().into();
     let lua_pc: PathBuf = std::env::var("DEP_KURE2_LUA_PC").unwrap().into();
 
     fs_extra::copy_items(&[&src_dir], &out_dir, &CopyOptions::new().overwrite(true)).unwrap();
@@ -22,6 +23,7 @@ fn main() {
         .arg(format!("--with-cudd={}", cudd_dir.display()))
         .arg(format!("--with-gmp-dir={}", gmp_dir.display()))
         .arg(format!("--with-lua-pc={}", lua_pc.display()))
+        .arg(format!("LUAC={}", lua_luac.display()))
         .current_dir(&build_dir)
         .status()
         .unwrap();

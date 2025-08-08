@@ -4,5 +4,6 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+kure2-lua-sys = { workspace = true }
 kure2-sys = { workspace = true }
 rug = { workspace = true }

@@ -39,6 +39,10 @@ fn main() {
         .write_to_file(out_path.join("bindings.rs"))
         .unwrap();
 
+    println!(
+        "cargo::metadata=luac={}",
+        build_dir.join("bin/luac").display()
+    );
     println!("cargo::metadata=dir={}", build_dir.display());
     println!("cargo::metadata=pc={}", pc_file.display());
     println!(
