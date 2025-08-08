@@ -41,6 +41,11 @@ fn main() {
         "cargo:rustc-link-search={}",
         build_dir.join("mtr").display()
     );
+    println!("cargo:rustc-link-lib=dddmp");
+    println!(
+        "cargo:rustc-link-search={}",
+        build_dir.join("dddmp").display()
+    );
     println!("cargo:rustc-link-lib=mtr");
     println!("cargo:rustc-link-search={}", build_dir.join("st").display());
     println!("cargo:rustc-link-lib=st");

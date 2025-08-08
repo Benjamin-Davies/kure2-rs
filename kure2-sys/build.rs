@@ -51,6 +51,11 @@ fn main() {
         .write_to_file(out_path.join("bindings.rs"))
         .unwrap();
 
+    pkg_config::Config::new()
+        .atleast_version("2.0")
+        .probe("glib-2.0")
+        .unwrap();
+
     println!("cargo::metadata=dir={}", build_dir.display());
     println!(
         "cargo:rustc-link-search={}",

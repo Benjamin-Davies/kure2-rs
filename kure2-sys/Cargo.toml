@@ -15,3 +15,4 @@ va_list = { workspace = true }
 [build-dependencies]
 bindgen = { workspace = true }
 fs_extra = { workspace = true }
+pkg-config = { workspace = true }

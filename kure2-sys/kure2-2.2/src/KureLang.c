@@ -75,10 +75,8 @@ lua_State *	kure_lua_new (KureContext * context)
 	error = luaL_loadbuffer (L, g_kure_compat, g_kure_compat_size,
 			"kure.compat code");
 	if (error) {
-		fprintf(stderr, "%s\n", lua_tostring(L, -1));
-		fprintf(stderr, "This is a permanent error. Aborting ...\n");
-		assert (error == 0);
-		return NULL; // avoid warning.
+		kure_context_set_error(context, KURE_ERR_INV_ARG, "%s", lua_tostring(L, -1));
+		return NULL;
 	}
 	else {
 		lua_pcall(L, 0, 0, 0);

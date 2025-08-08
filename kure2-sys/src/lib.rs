@@ -14,7 +14,10 @@ include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 
 #[cfg(test)]
 mod tests {
-    use crate::{kure_context_destroy, kure_context_get_error, kure_context_new};
+    use crate::{
+        kure_context_destroy, kure_context_get_error, kure_context_new, kure_lua_destroy,
+        kure_lua_new,
+    };
 
     #[test]
     fn test_create_destroy_context() {
@@ -25,6 +28,23 @@ mod tests {
             let error = kure_context_get_error(context);
             assert!(error.is_null());
 
+            kure_context_destroy(context);
+        }
+    }
+
+    #[test]
+    fn test_create_destroy_lua_state() {
+        unsafe {
+            let context = kure_context_new();
+            assert!(!context.is_null());
+
+            let lua_state = kure_lua_new(context);
+            assert!(!lua_state.is_null());
+
+            let error = kure_context_get_error(context);
+            assert!(error.is_null());
+
+            kure_lua_destroy(lua_state);
             kure_context_destroy(context);
         }
     }
