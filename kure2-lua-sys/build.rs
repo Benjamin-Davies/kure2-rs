@@ -25,7 +25,7 @@ fn main() {
     {
         let mut pc_file = File::create(&pc_file).unwrap();
         writeln!(pc_file, "prefix={}", build_dir.display()).unwrap();
-        pc_file.write(include_bytes!("lua.pc")).unwrap();
+        let _ = pc_file.write(include_bytes!("lua.pc")).unwrap();
     }
 
     let bindings = bindgen::Builder::default()

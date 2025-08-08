@@ -42,6 +42,7 @@ fn main() {
         .blocklist_file(".*/cudd.h")
         .blocklist_file(".*/gmp.h")
         .blocklist_file(".*/lua.h")
+        .allowlist_item("_?(KURE|Kure|kure).*")
         .generate()
         .unwrap();
 
