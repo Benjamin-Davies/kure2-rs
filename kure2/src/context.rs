@@ -39,12 +39,12 @@ impl Drop for Context {
 }
 
 /// Access a pre-initialized context. This is a handle to the local [`Context`].
-pub fn context() -> &'static Context {
+pub fn context() -> Context {
     thread_local! {
-        static CONTEXT: &'static Context = Box::leak(Box::new(Context::new()));
+        static CONTEXT: Context = Context::new();
     }
 
-    CONTEXT.with(|&ctx| ctx)
+    CONTEXT.with(|ctx| ctx.clone())
 }
 
 #[cfg(test)]

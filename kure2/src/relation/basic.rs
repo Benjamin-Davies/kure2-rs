@@ -117,7 +117,7 @@ impl ops::Neg for Relation {
     type Output = Self;
 
     fn neg(self) -> Self::Output {
-        let result = Self::empty_with_context(&self.ctx, &self.rows(), &self.cols());
+        let result = Self::empty_with_context(self.ctx.clone(), &self.rows(), &self.cols());
         let success = unsafe { ffi::kure_complement(result.ptr, self.ptr) };
         if success == 0 {
             self.ctx.panic_with_error();
@@ -130,7 +130,7 @@ impl ops::BitOr for Relation {
     type Output = Self;
 
     fn bitor(self, rhs: Self) -> Self::Output {
-        let result = Self::empty_with_context(&self.ctx, &self.rows(), &self.cols());
+        let result = Self::empty_with_context(self.ctx.clone(), &self.rows(), &self.cols());
         let success = unsafe { ffi::kure_or(result.ptr, self.ptr, rhs.ptr) };
         if success == 0 {
             self.ctx.panic_with_error();
@@ -143,7 +143,7 @@ impl ops::BitAnd for Relation {
     type Output = Self;
 
     fn bitand(self, rhs: Self) -> Self::Output {
-        let result = Self::empty_with_context(&self.ctx, &self.rows(), &self.cols());
+        let result = Self::empty_with_context(self.ctx.clone(), &self.rows(), &self.cols());
         let success = unsafe { ffi::kure_and(result.ptr, self.ptr, rhs.ptr) };
         if success == 0 {
             self.ctx.panic_with_error();

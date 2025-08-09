@@ -6,8 +6,8 @@ mod basic;
 
 /// A relation, represented using a binary decision diagram (BDD).
 pub struct Relation {
-    ptr: *mut ffi::KureRel,
-    ctx: Context,
+    pub(crate) ptr: *mut ffi::KureRel,
+    pub(crate) ctx: Context,
 }
 
 // Factories
@@ -43,57 +43,56 @@ impl Relation {
     }
 
     /// Creates an empty relation with the given number of rows and columns in the given [`Context`].
-    pub fn empty_with_context(ctx: &Context, rows: &rug::Integer, cols: &rug::Integer) -> Self {
+    pub fn empty_with_context(ctx: Context, rows: &rug::Integer, cols: &rug::Integer) -> Self {
         let ptr = unsafe { ffi::kure_rel_new_with_size(ctx.ptr, rows.as_raw(), cols.as_raw()) };
         if ptr.is_null() {
             ctx.panic_with_error();
         }
 
-        Self {
-            ptr,
-            ctx: ctx.clone(),
-        }
+        Self { ptr, ctx }
     }
 
     /// Creates an empty relation with the given number of rows and columns in the given [`Context`].
-    pub fn empty_i32_with_context(ctx: &Context, rows: i32, cols: i32) -> Self {
+    pub fn empty_i32_with_context(ctx: Context, rows: i32, cols: i32) -> Self {
         let ptr = unsafe { ffi::kure_rel_new_with_size_si(ctx.ptr, rows, cols) };
         if ptr.is_null() {
             ctx.panic_with_error();
         }
 
-        Self {
-            ptr,
-            ctx: ctx.clone(),
-        }
+        Self { ptr, ctx }
     }
 
     /// Creates an identity relation with the given size in the given [`Context`].
-    pub fn identity_with_context(ctx: &Context, size: &rug::Integer) -> Self {
+    pub fn identity_with_context(ctx: Context, size: &rug::Integer) -> Self {
         let mut relation = Self::empty_with_context(ctx, size, size);
         relation.identity_mut();
         relation
     }
 
     /// Creates an identity relation with the given size in the given [`Context`].
-    pub fn identity_i32_with_context(ctx: &Context, size: i32) -> Self {
+    pub fn identity_i32_with_context(ctx: Context, size: i32) -> Self {
         let mut relation = Self::empty_i32_with_context(ctx, size, size);
         relation.identity_mut();
         relation
     }
 
     /// Creates a universal relation with the given number of rows and columns in the given [`Context`].
-    pub fn all_with_context(ctx: &Context, rows: &rug::Integer, cols: &rug::Integer) -> Self {
+    pub fn all_with_context(ctx: Context, rows: &rug::Integer, cols: &rug::Integer) -> Self {
         let mut relation = Self::empty_with_context(ctx, rows, cols);
         relation.all_mut();
         relation
     }
 
     /// Creates a universal relation with the given number of rows and columns in the given [`Context`].
-    pub fn all_i32_with_context(ctx: &Context, rows: i32, cols: i32) -> Self {
+    pub fn all_i32_with_context(ctx: Context, rows: i32, cols: i32) -> Self {
         let mut relation = Self::empty_i32_with_context(ctx, rows, cols);
         relation.all_mut();
         relation
+    }
+
+    /// Returns the context associated with this relation.
+    pub fn context(&self) -> &Context {
+        &self.ctx
     }
 
     /// Sets the given relation to the empty relation.

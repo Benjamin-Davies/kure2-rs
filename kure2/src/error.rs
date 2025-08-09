@@ -17,7 +17,7 @@ impl Context {
         if error.is_null() {
             None
         } else {
-            Some(unsafe { Error::from_ffi(&*error) })
+            Some(unsafe { Error::from_ffi(error) })
         }
     }
 
@@ -31,11 +31,20 @@ impl Context {
 }
 
 impl Error {
-    unsafe fn from_ffi(error: &ffi::KureError) -> Self {
-        let message = unsafe { CStr::from_ptr(error.message) };
+    /// Error may be null.
+    pub(crate) unsafe fn from_ffi(error: *const ffi::KureError) -> Self {
+        if error.is_null() {
+            return Self {
+                message: "Unknown error".to_owned(),
+                code: 0,
+            };
+        }
+
+        let message = unsafe { CStr::from_ptr((*error).message) };
+        let code = unsafe { (*error).code };
         Self {
             message: message.to_str().unwrap().to_owned(),
-            code: error.code,
+            code,
         }
     }
 }
