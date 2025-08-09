@@ -5,13 +5,13 @@ use crate::{Context, context};
 mod basic;
 
 /// A relation, represented using a binary decision diagram (BDD).
-pub struct Relation<'ctx> {
+pub struct Relation {
     ptr: *mut ffi::KureRel,
-    ctx: &'ctx Context,
+    ctx: Context,
 }
 
 // Factories
-impl Relation<'static> {
+impl Relation {
     /// Creates an empty relation with the given number of rows and columns in the given [`Context`].
     pub fn empty(rows: &rug::Integer, cols: &rug::Integer) -> Self {
         Self::empty_with_context(context(), rows, cols)
@@ -41,64 +41,61 @@ impl Relation<'static> {
     pub fn all_i32(rows: i32, cols: i32) -> Self {
         Self::all_i32_with_context(context(), rows, cols)
     }
-}
 
-impl<'ctx> Relation<'ctx> {
     /// Creates an empty relation with the given number of rows and columns in the given [`Context`].
-    pub fn empty_with_context(
-        ctx: &'ctx Context,
-        rows: &rug::Integer,
-        cols: &rug::Integer,
-    ) -> Self {
+    pub fn empty_with_context(ctx: &Context, rows: &rug::Integer, cols: &rug::Integer) -> Self {
         let ptr = unsafe { ffi::kure_rel_new_with_size(ctx.ptr, rows.as_raw(), cols.as_raw()) };
         if ptr.is_null() {
             ctx.panic_with_error();
         }
 
-        Self { ptr, ctx }
+        Self {
+            ptr,
+            ctx: ctx.clone(),
+        }
     }
 
     /// Creates an empty relation with the given number of rows and columns in the given [`Context`].
-    pub fn empty_i32_with_context(ctx: &'ctx Context, rows: i32, cols: i32) -> Self {
+    pub fn empty_i32_with_context(ctx: &Context, rows: i32, cols: i32) -> Self {
         let ptr = unsafe { ffi::kure_rel_new_with_size_si(ctx.ptr, rows, cols) };
         if ptr.is_null() {
             ctx.panic_with_error();
         }
 
-        Self { ptr, ctx }
+        Self {
+            ptr,
+            ctx: ctx.clone(),
+        }
     }
 
     /// Creates an identity relation with the given size in the given [`Context`].
-    pub fn identity_with_context(ctx: &'ctx Context, size: &rug::Integer) -> Self {
+    pub fn identity_with_context(ctx: &Context, size: &rug::Integer) -> Self {
         let mut relation = Self::empty_with_context(ctx, size, size);
         relation.identity_mut();
         relation
     }
 
     /// Creates an identity relation with the given size in the given [`Context`].
-    pub fn identity_i32_with_context(ctx: &'ctx Context, size: i32) -> Self {
+    pub fn identity_i32_with_context(ctx: &Context, size: i32) -> Self {
         let mut relation = Self::empty_i32_with_context(ctx, size, size);
         relation.identity_mut();
         relation
     }
 
     /// Creates a universal relation with the given number of rows and columns in the given [`Context`].
-    pub fn all_with_context(ctx: &'ctx Context, rows: &rug::Integer, cols: &rug::Integer) -> Self {
+    pub fn all_with_context(ctx: &Context, rows: &rug::Integer, cols: &rug::Integer) -> Self {
         let mut relation = Self::empty_with_context(ctx, rows, cols);
         relation.all_mut();
         relation
     }
 
     /// Creates a universal relation with the given number of rows and columns in the given [`Context`].
-    pub fn all_i32_with_context(ctx: &'ctx Context, rows: i32, cols: i32) -> Self {
+    pub fn all_i32_with_context(ctx: &Context, rows: i32, cols: i32) -> Self {
         let mut relation = Self::empty_i32_with_context(ctx, rows, cols);
         relation.all_mut();
         relation
     }
-}
 
-// Overwriting methods
-impl Relation<'_> {
     /// Sets the given relation to the empty relation.
     pub fn empty_mut(&mut self) {
         let success = unsafe { ffi::kure_O(self.ptr) };
@@ -124,17 +121,20 @@ impl Relation<'_> {
     }
 }
 
-impl Clone for Relation<'_> {
+impl Clone for Relation {
     fn clone(&self) -> Self {
         let ptr = unsafe { ffi::kure_rel_new_copy(self.ptr) };
         if ptr.is_null() {
             self.ctx.panic_with_error();
         }
-        Self { ptr, ctx: self.ctx }
+        Self {
+            ptr,
+            ctx: self.ctx.clone(),
+        }
     }
 }
 
-impl Drop for Relation<'_> {
+impl Drop for Relation {
     fn drop(&mut self) {
         unsafe { ffi::kure_rel_destroy(self.ptr) };
     }

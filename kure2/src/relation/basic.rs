@@ -4,7 +4,7 @@ use kure2_sys as ffi;
 
 use crate::Relation;
 
-impl Relation<'_> {
+impl Relation {
     /// Tests if the given relation is empty, that is, R is equal to the empty set.
     pub fn is_empty(&self) -> bool {
         let mut success = 0;
@@ -100,7 +100,7 @@ impl Relation<'_> {
     }
 }
 
-impl PartialEq for Relation<'_> {
+impl PartialEq for Relation {
     fn eq(&self, other: &Self) -> bool {
         let mut success = 0;
         let result = unsafe { ffi::kure_equals(self.ptr, other.ptr, &mut success) };
@@ -111,13 +111,13 @@ impl PartialEq for Relation<'_> {
     }
 }
 
-impl Eq for Relation<'_> {}
+impl Eq for Relation {}
 
-impl ops::Neg for Relation<'_> {
+impl ops::Neg for Relation {
     type Output = Self;
 
     fn neg(self) -> Self::Output {
-        let result = Self::empty_with_context(self.ctx, &self.rows(), &self.cols());
+        let result = Self::empty_with_context(&self.ctx, &self.rows(), &self.cols());
         let success = unsafe { ffi::kure_complement(result.ptr, self.ptr) };
         if success == 0 {
             self.ctx.panic_with_error();
@@ -126,11 +126,11 @@ impl ops::Neg for Relation<'_> {
     }
 }
 
-impl ops::BitOr for Relation<'_> {
+impl ops::BitOr for Relation {
     type Output = Self;
 
     fn bitor(self, rhs: Self) -> Self::Output {
-        let result = Self::empty_with_context(self.ctx, &self.rows(), &self.cols());
+        let result = Self::empty_with_context(&self.ctx, &self.rows(), &self.cols());
         let success = unsafe { ffi::kure_or(result.ptr, self.ptr, rhs.ptr) };
         if success == 0 {
             self.ctx.panic_with_error();
@@ -139,11 +139,11 @@ impl ops::BitOr for Relation<'_> {
     }
 }
 
-impl ops::BitAnd for Relation<'_> {
+impl ops::BitAnd for Relation {
     type Output = Self;
 
     fn bitand(self, rhs: Self) -> Self::Output {
-        let result = Self::empty_with_context(self.ctx, &self.rows(), &self.cols());
+        let result = Self::empty_with_context(&self.ctx, &self.rows(), &self.cols());
         let success = unsafe { ffi::kure_and(result.ptr, self.ptr, rhs.ptr) };
         if success == 0 {
             self.ctx.panic_with_error();
