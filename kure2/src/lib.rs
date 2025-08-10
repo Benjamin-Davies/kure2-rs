@@ -14,12 +14,11 @@
 
 mod context;
 mod error;
-mod lang;
+pub mod lang;
 mod relation;
 
 pub use crate::{
     context::{Context, context},
     error::Error,
-    lang::LuaState,
     relation::Relation,
 };

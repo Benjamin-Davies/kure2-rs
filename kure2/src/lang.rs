@@ -1,3 +1,5 @@
+//! The Kure-Lua bindings and the embedded language.
+
 use std::{ffi::CString, ptr};
 
 use kure2_lua_sys as lua_ffi;
@@ -5,7 +7,7 @@ use kure2_sys as ffi;
 
 use crate::{Context, Error, Relation, context};
 
-/// The state of the Kure-Lua bindings.
+/// State for the Kure-Lua bindings and the embedded language.
 pub struct LuaState {
     ptr: *mut lua_ffi::lua_State,
     ctx: Context,
@@ -39,9 +41,9 @@ impl LuaState {
         let c_expr = CString::new(expr).expect("expr contains null byte");
 
         let mut error = ptr::null_mut();
-        let result =
+        let success =
             unsafe { ffi::kure_lang_assign(self.ptr, c_var.as_ptr(), c_expr.as_ptr(), &mut error) };
-        if result == 0 {
+        if success == 0 {
             let error = unsafe { Error::from_ffi(error) };
             return Err(error);
         }
@@ -73,6 +75,35 @@ impl LuaState {
             ctx: self.ctx.clone(),
         })
     }
+
+    /// Loads a given translation unit written in the embedded language. Translations units may only
+    /// contain function and program definitions.
+    pub fn load(&mut self, transl_unit: &str) -> Result<(), Error> {
+        let c_transl_unit = CString::new(transl_unit).expect("transl_unit contains null byte");
+
+        let mut error = ptr::null_mut();
+        let success = unsafe { ffi::kure_lang_load(self.ptr, c_transl_unit.as_ptr(), &mut error) };
+        if success == 0 {
+            let error = unsafe { Error::from_ffi(error) };
+            return Err(error);
+        }
+
+        Ok(())
+    }
+
+    /// Loads the contents of the given file using [`LuaState::load`].
+    pub fn load_file(&mut self, file: &str) -> Result<(), Error> {
+        let c_file = CString::new(file).expect("file contains null byte");
+
+        let mut error = ptr::null_mut();
+        let success = unsafe { ffi::kure_lang_load_file(self.ptr, c_file.as_ptr(), &mut error) };
+        if success == 0 {
+            let error = unsafe { Error::from_ffi(error) };
+            return Err(error);
+        }
+
+        Ok(())
+    }
 }
 
 impl Default for LuaState {
@@ -87,9 +118,26 @@ impl Drop for LuaState {
     }
 }
 
+/// Converts an expression in the embedded language to a Lua expression.
+pub fn expr_to_lua(expr: &str) -> Result<String, Error> {
+    let c_expr = CString::new(expr).expect("expr contains null byte");
+
+    let mut error = ptr::null_mut();
+    let lua_str_ptr = unsafe { ffi::kure_lang_expr_to_lua(c_expr.as_ptr(), &mut error) };
+    if lua_str_ptr.is_null() {
+        let error = unsafe { Error::from_ffi(error) };
+        return Err(error);
+    }
+
+    let lua_str = unsafe { CString::from_raw(lua_str_ptr) };
+    Ok(lua_str
+        .into_string()
+        .expect("lua string contains invalid UTF-8"))
+}
+
 #[cfg(test)]
 mod tests {
-    use crate::LuaState;
+    use crate::lang::{self, LuaState};
 
     #[test]
     fn test_create_destroy_lua_state() {
@@ -114,5 +162,36 @@ mod tests {
 
         let result = state.exec("R").unwrap();
         assert!(!result.is_empty());
+    }
+
+    #[test]
+    fn test_load() {
+        let mut state = LuaState::new();
+        let prog = include_str!("../../kure2-sys/kure2-2.2/data/programs/DFS.prog");
+
+        state.load(prog).unwrap();
+
+        let result = state.exec("Dfs(TRUE(), TRUE(), TRUE())").unwrap();
+        assert!(!result.is_empty());
+    }
+
+    #[test]
+    fn test_load_file() {
+        let mut state = LuaState::new();
+        let file = "../kure2-sys/kure2-2.2/data/programs/DFS.prog";
+
+        state.load_file(file).unwrap();
+
+        let result = state.exec("Dfs(TRUE(), TRUE(), TRUE())").unwrap();
+        assert!(!result.is_empty());
+    }
+
+    #[test]
+    fn test_expr_to_lua() {
+        let expr = "R|S";
+
+        let result = lang::expr_to_lua(expr).unwrap();
+
+        assert_eq!(result, "kure.lor(R,S)");
     }
 }
