@@ -40,11 +40,13 @@ impl LuaState {
         let c_var = CString::new(var).expect("var name contains null byte");
         let c_expr = CString::new(expr).expect("expr contains null byte");
 
-        let mut error = ptr::null_mut();
-        let success =
-            unsafe { ffi::kure_lang_assign(self.ptr, c_var.as_ptr(), c_expr.as_ptr(), &mut error) };
+        let mut error_ptr = ptr::null_mut();
+        let success = unsafe {
+            ffi::kure_lang_assign(self.ptr, c_var.as_ptr(), c_expr.as_ptr(), &mut error_ptr)
+        };
         if success == 0 {
-            let error = unsafe { Error::from_ffi(error) };
+            let error = unsafe { Error::from_ffi(error_ptr) };
+            unsafe { ffi::kure_error_destroy(error_ptr) };
             return Err(error);
         }
 
@@ -63,10 +65,11 @@ impl LuaState {
     pub fn exec(&mut self, expr: &str) -> Result<Relation, Error> {
         let c_expr = CString::new(expr).expect("expr contains null byte");
 
-        let mut error = ptr::null_mut();
-        let ptr = unsafe { ffi::kure_lang_exec(self.ptr, c_expr.as_ptr(), &mut error) };
+        let mut error_ptr = ptr::null_mut();
+        let ptr = unsafe { ffi::kure_lang_exec(self.ptr, c_expr.as_ptr(), &mut error_ptr) };
         if ptr.is_null() {
-            let error = unsafe { Error::from_ffi(error) };
+            let error = unsafe { Error::from_ffi(error_ptr) };
+            unsafe { ffi::kure_error_destroy(error_ptr) };
             return Err(error);
         }
 
@@ -81,10 +84,12 @@ impl LuaState {
     pub fn load(&mut self, transl_unit: &str) -> Result<(), Error> {
         let c_transl_unit = CString::new(transl_unit).expect("transl_unit contains null byte");
 
-        let mut error = ptr::null_mut();
-        let success = unsafe { ffi::kure_lang_load(self.ptr, c_transl_unit.as_ptr(), &mut error) };
+        let mut error_ptr = ptr::null_mut();
+        let success =
+            unsafe { ffi::kure_lang_load(self.ptr, c_transl_unit.as_ptr(), &mut error_ptr) };
         if success == 0 {
-            let error = unsafe { Error::from_ffi(error) };
+            let error = unsafe { Error::from_ffi(error_ptr) };
+            unsafe { ffi::kure_error_destroy(error_ptr) };
             return Err(error);
         }
 
@@ -95,10 +100,12 @@ impl LuaState {
     pub fn load_file(&mut self, file: &str) -> Result<(), Error> {
         let c_file = CString::new(file).expect("file contains null byte");
 
-        let mut error = ptr::null_mut();
-        let success = unsafe { ffi::kure_lang_load_file(self.ptr, c_file.as_ptr(), &mut error) };
+        let mut error_ptr = ptr::null_mut();
+        let success =
+            unsafe { ffi::kure_lang_load_file(self.ptr, c_file.as_ptr(), &mut error_ptr) };
         if success == 0 {
-            let error = unsafe { Error::from_ffi(error) };
+            let error = unsafe { Error::from_ffi(error_ptr) };
+            unsafe { ffi::kure_error_destroy(error_ptr) };
             return Err(error);
         }
 
@@ -122,10 +129,11 @@ impl Drop for LuaState {
 pub fn expr_to_lua(expr: &str) -> Result<String, Error> {
     let c_expr = CString::new(expr).expect("expr contains null byte");
 
-    let mut error = ptr::null_mut();
-    let lua_str_ptr = unsafe { ffi::kure_lang_expr_to_lua(c_expr.as_ptr(), &mut error) };
+    let mut error_ptr = ptr::null_mut();
+    let lua_str_ptr = unsafe { ffi::kure_lang_expr_to_lua(c_expr.as_ptr(), &mut error_ptr) };
     if lua_str_ptr.is_null() {
-        let error = unsafe { Error::from_ffi(error) };
+        let error = unsafe { Error::from_ffi(error_ptr) };
+        unsafe { ffi::kure_error_destroy(error_ptr) };
         return Err(error);
     }
 
