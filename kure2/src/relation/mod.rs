@@ -3,6 +3,7 @@ use kure2_sys as ffi;
 use crate::{Context, context};
 
 mod basic;
+mod fmt;
 
 /// A relation, represented using a binary decision diagram (BDD).
 pub struct Relation {
