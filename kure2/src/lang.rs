@@ -97,6 +97,25 @@ impl LuaState {
         })
     }
 
+    /// Executes the given Lua code. The last statement must be a return statement and it must
+    /// return a relation.
+    pub fn exec_lua(&mut self, chunk: &str) -> Result<Relation, Error> {
+        let c_chunk = CString::new(chunk).expect("chunk contains null byte");
+
+        let mut error_ptr = ptr::null_mut();
+        let ptr = unsafe { ffi::kure_lua_exec(self.ptr, c_chunk.as_ptr(), &mut error_ptr) };
+        if ptr.is_null() {
+            let error = unsafe { Error::from_ffi(error_ptr) };
+            unsafe { ffi::kure_error_destroy(error_ptr) };
+            return Err(error);
+        }
+
+        Ok(Relation {
+            ptr,
+            ctx: self.ctx.clone(),
+        })
+    }
+
     /// Loads a given translation unit written in the embedded language. Translations units may only
     /// contain function and program definitions.
     pub fn load(&mut self, transl_unit: &str) -> Result<(), Error> {
@@ -287,6 +306,15 @@ mod tests {
         state.assign("R", "TRUE()").unwrap();
 
         let result = state.exec("R").unwrap();
+        assert!(!result.is_empty());
+    }
+
+    #[test]
+    fn test_exec_lua() {
+        let mut state = LuaState::new();
+
+        let result = state.exec_lua("return kure.compat.TRUE()").unwrap();
+
         assert!(!result.is_empty());
     }
 
