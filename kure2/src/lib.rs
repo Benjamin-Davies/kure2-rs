@@ -20,5 +20,5 @@ mod relation;
 pub use crate::{
     context::{Context, context},
     error::Error,
-    relation::Relation,
+    relation::{Relation, fmt},
 };

@@ -1,10 +1,18 @@
+use std::{cell::RefCell, io, ops, rc::Rc};
+
 use kure2::lang::LuaState;
+use kure2_cli::{Repl, repl_helper::ReplHelper};
 use rustyline::{Editor, error::ReadlineError, history::DefaultHistory};
 
-fn main() {
-    let mut rl = Editor::<(), DefaultHistory>::new().unwrap();
+fn main() -> io::Result<()> {
+    let mut rl = Editor::new().unwrap();
+    let mut stdout = io::stdout();
 
-    let mut state = LuaState::new();
+    let repl = Repl::new();
+    repl.welcome(&mut stdout)?;
+
+    let repl = Rc::new(RefCell::new(repl));
+    rl.set_helper(Some(ReplHelper::new(repl.clone())));
 
     loop {
         let line = match rl.readline("> ") {
@@ -15,26 +23,14 @@ fn main() {
             Err(ReadlineError::Interrupted) | Err(ReadlineError::Eof) => break,
             Err(err) => panic!("Error reading line: {err}"),
         };
-        let line = line.trim();
 
-        if line.starts_with('{') || line.is_empty() {
-            // Do nothing
-        } else if let Some((var, expr)) = line.split_once('=') {
-            match state.assign(var.trim(), expr.trim()) {
-                Ok(()) => {}
-                Err(err) => {
-                    eprintln!("Error evaluating `{line}`: {err}");
-                }
-            }
-        } else {
-            match state.exec(line) {
-                Ok(relation) => {
-                    println!("{relation}");
-                }
-                Err(err) => {
-                    eprintln!("Error evaluating `{line}`: {err}");
-                }
-            }
+        let res = repl.borrow_mut().process_input(&line, &mut stdout)?;
+
+        match res {
+            ops::ControlFlow::Continue(()) => continue,
+            ops::ControlFlow::Break(()) => break,
         }
     }
+
+    Ok(())
 }
