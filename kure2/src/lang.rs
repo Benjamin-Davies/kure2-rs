@@ -148,6 +148,36 @@ impl LuaState {
 
         Ok(())
     }
+
+    /// Gets a relation variable by its name.
+    pub fn relation(&self, name: &str) -> Result<Relation, Error> {
+        let c_name = CString::new(name).expect("name contains null byte");
+
+        let ptr = unsafe { ffi::kure_lua_get_rel_copy(self.ptr, c_name.as_ptr()) };
+        if ptr.is_null() {
+            return Err("Relation not found".into());
+        }
+
+        Ok(Relation {
+            ptr,
+            ctx: self.ctx.clone(),
+        })
+    }
+
+    /// Sets a relation variable given its name.
+    pub fn set_relation(&mut self, name: &str, rel: &Relation) -> Result<(), Error> {
+        let c_name = CString::new(name).expect("name contains null byte");
+
+        let mut error_ptr = ptr::null_mut();
+        let success = unsafe { ffi::kure_lua_set_rel_copy(self.ptr, c_name.as_ptr(), rel.ptr) };
+        if success == 0 {
+            let error = unsafe { Error::from_ffi(error_ptr) };
+            unsafe { ffi::kure_error_destroy(error_ptr) };
+            return Err(error);
+        }
+
+        Ok(())
+    }
 }
 
 impl Default for LuaState {
@@ -282,7 +312,10 @@ fn make_ffi_observer<O: ParserObserver>(observer: &mut O) -> ffi::KureParserObse
 
 #[cfg(test)]
 mod tests {
-    use crate::lang::{self, LuaState, ParserObserver};
+    use crate::{
+        Relation,
+        lang::{self, LuaState, ParserObserver},
+    };
 
     #[test]
     fn test_create_destroy_lua_state() {
@@ -338,6 +371,28 @@ mod tests {
 
         let result = state.exec("Dfs(TRUE(), TRUE(), TRUE())").unwrap();
         assert!(!result.is_empty());
+    }
+
+    #[test]
+    fn test_get_relation_not_found() {
+        let mut state = LuaState::new();
+        let rel = Relation::identity_i32(3);
+
+        state.relation("R").unwrap_err();
+    }
+
+    #[test]
+    fn test_get_set_relation() {
+        let mut state = LuaState::new();
+        let rel = Relation::identity_i32(3);
+
+        state.set_relation("R", &rel).unwrap();
+        state.assign("S", "-R").unwrap();
+        let result = state.relation("S").unwrap();
+
+        assert_eq!(result.rows_i32(), 3);
+        assert_eq!(result.cols_i32(), 3);
+        assert_eq!(result, -rel);
     }
 
     #[test]

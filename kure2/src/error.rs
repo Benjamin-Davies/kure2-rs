@@ -34,10 +34,7 @@ impl Error {
     /// Error may be null.
     pub(crate) unsafe fn from_ffi(error: *const ffi::KureError) -> Self {
         if error.is_null() {
-            return Self {
-                message: "Unknown error".to_owned(),
-                code: 0,
-            };
+            return "Unknown error".into();
         }
 
         let message = unsafe { CStr::from_ptr((*error).message) };
@@ -45,6 +42,15 @@ impl Error {
         Self {
             message: message.to_str().unwrap().to_owned(),
             code,
+        }
+    }
+}
+
+impl From<&str> for Error {
+    fn from(value: &str) -> Self {
+        Self {
+            message: value.to_owned(),
+            code: 0,
         }
     }
 }

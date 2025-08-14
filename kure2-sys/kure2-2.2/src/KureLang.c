@@ -38,16 +38,14 @@ Kure_success kure_lua_set_rel_copy (lua_State * L, const char * name, KureRel * 
 	return TRUE;
 }
 
-#if 0
 KureRel * kure_lua_get_rel_copy (lua_State * L, const char * name)
 {
 	if (strcmp(name, "$") == 0) lua_getglobal(L, KURE_DOLLAR_SUBST);
 	else lua_getglobal(L, name);
 
 	if (lua_isnoneornil(L,-1)) return NULL;
-	return kure_rel_new_copy (_kure_lua_rel_get(L, -1));
+	return kure_rel_new_copy (kure_lua_torel(L, -1, NULL));
 }
-#endif
 
 Kure_success kure_lua_set_dom_copy (lua_State * L, const char * name, KureDom * dom)
 {
