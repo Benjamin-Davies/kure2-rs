@@ -3,12 +3,16 @@
 use std::{
     ffi::{CStr, CString, c_void},
     ptr,
+    sync::{Mutex, MutexGuard},
 };
 
 use kure2_lua_sys as lua_ffi;
 use kure2_sys as ffi;
 
 use crate::{Context, Error, Relation, context};
+
+/// Lua does not seem to like running on multiple threads at the same time, so we use a global lock.
+static GLOBAL_INTERPRETER_LOCK: Mutex<()> = Mutex::new(());
 
 /// Callbacks for [`parse`] and [`parse_file`].
 pub trait ParserObserver {
@@ -39,6 +43,8 @@ impl LuaState {
 
     /// Creates a new [`LuaState`] which can be used with the Kure-Lua binding and the embedded language in the given [`Context`].
     pub fn with_context(ctx: Context) -> Self {
+        let _lock: MutexGuard<()> = GLOBAL_INTERPRETER_LOCK.lock().unwrap();
+
         let ptr = unsafe { ffi::kure_lua_new(ctx.ptr) };
         if ptr.is_null() {
             ctx.panic_with_error();
@@ -55,6 +61,8 @@ impl LuaState {
     /// If the global variable is non-NULL it is overwritten. If the call fails, the global Lua
     /// variable remains unchanged.
     pub fn assign(&mut self, var: &str, expr: &str) -> Result<(), Error> {
+        let _lock: MutexGuard<()> = GLOBAL_INTERPRETER_LOCK.lock().unwrap();
+
         let c_var = CString::new(var).expect("var name contains null byte");
         let c_expr = CString::new(expr).expect("expr contains null byte");
 
@@ -81,6 +89,8 @@ impl LuaState {
     /// Remark: Some functions in the embedded language depend on a special global variable `__c`
     /// which holds a [`Context`].
     pub fn exec(&mut self, expr: &str) -> Result<Relation, Error> {
+        let _lock: MutexGuard<()> = GLOBAL_INTERPRETER_LOCK.lock().unwrap();
+
         let c_expr = CString::new(expr).expect("expr contains null byte");
 
         let mut error_ptr = ptr::null_mut();
@@ -100,6 +110,8 @@ impl LuaState {
     /// Executes the given Lua code. The last statement must be a return statement and it must
     /// return a relation.
     pub fn exec_lua(&mut self, chunk: &str) -> Result<Relation, Error> {
+        let _lock: MutexGuard<()> = GLOBAL_INTERPRETER_LOCK.lock().unwrap();
+
         let c_chunk = CString::new(chunk).expect("chunk contains null byte");
 
         let mut error_ptr = ptr::null_mut();
@@ -119,6 +131,8 @@ impl LuaState {
     /// Loads a given translation unit written in the embedded language. Translations units may only
     /// contain function and program definitions.
     pub fn load(&mut self, transl_unit: &str) -> Result<(), Error> {
+        let _lock: MutexGuard<()> = GLOBAL_INTERPRETER_LOCK.lock().unwrap();
+
         let c_transl_unit = CString::new(transl_unit).expect("transl_unit contains null byte");
 
         let mut error_ptr = ptr::null_mut();
@@ -135,6 +149,8 @@ impl LuaState {
 
     /// Loads the contents of the given file using [`LuaState::load`].
     pub fn load_file(&mut self, file: &str) -> Result<(), Error> {
+        let _lock: MutexGuard<()> = GLOBAL_INTERPRETER_LOCK.lock().unwrap();
+
         let c_file = CString::new(file).expect("file name contains null byte");
 
         let mut error_ptr = ptr::null_mut();
@@ -151,6 +167,8 @@ impl LuaState {
 
     /// Gets a relation variable by its name.
     pub fn relation(&self, name: &str) -> Option<Relation> {
+        let _lock: MutexGuard<()> = GLOBAL_INTERPRETER_LOCK.lock().unwrap();
+
         let c_name = CString::new(name).expect("name contains null byte");
 
         let ptr = unsafe { ffi::kure_lua_get_rel_copy(self.ptr, c_name.as_ptr()) };
@@ -166,6 +184,8 @@ impl LuaState {
 
     /// Sets a relation variable given its name.
     pub fn set_relation(&mut self, name: &str, rel: &Relation) -> Result<(), Error> {
+        let _lock: MutexGuard<()> = GLOBAL_INTERPRETER_LOCK.lock().unwrap();
+
         let c_name = CString::new(name).expect("name contains null byte");
 
         let success = unsafe { ffi::kure_lua_set_rel_copy(self.ptr, c_name.as_ptr(), rel.ptr) };
@@ -372,8 +392,7 @@ mod tests {
 
     #[test]
     fn test_get_relation_not_found() {
-        let mut state = LuaState::new();
-        let rel = Relation::identity_i32(3);
+        let state = LuaState::new();
 
         let result = state.relation("R");
 

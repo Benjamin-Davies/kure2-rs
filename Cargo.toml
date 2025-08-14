@@ -12,6 +12,7 @@ kure2-sys = { path = "kure2-sys" }
 kure2-lua-sys = { path = "kure2-lua-sys" }
 libc = { version = "0.2.174", default-features = false }
 pkg-config = "0.3.32"
+pretty_assertions = "1.4.1"
 rug = "1.27.0"
 rustyline = "16.0.0"
 va_list = "0.2.1"
