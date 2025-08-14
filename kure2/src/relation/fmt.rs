@@ -110,6 +110,7 @@ impl fmt::Debug for Relation {
     }
 }
 
+/// Parses a relation from a string in RelView ASCII format.
 pub fn parse_relation(input: &str) -> Result<(&str, Relation), Error> {
     let (name, rest) = input.split_once("(").ok_or("Missing `(`")?;
     let name = name.trim();
@@ -144,6 +145,7 @@ pub fn parse_relation(input: &str) -> Result<(&str, Relation), Error> {
     Ok((name, relation))
 }
 
+/// Parses a relation from a string in matrix format.
 pub fn parse_matrix(input: &str) -> Result<Relation, Error> {
     let mut lines = input.lines();
 

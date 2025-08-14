@@ -1,6 +1,9 @@
-use std::{collections::BTreeMap, io, ops};
+use std::{collections::BTreeMap, fs, io, ops};
 
-use kure2::lang::LuaState;
+use kure2::{
+    fmt::{parse_matrix, parse_relation},
+    lang::LuaState,
+};
 
 const HELP_MESSAGE: &str = "Available commands:\n\
    .help - Show this help message\n\
@@ -50,31 +53,38 @@ impl Node {
                 Ok(ops::ControlFlow::Continue(()))
             });
         load.insert(Edge::Keyword("rel"))
+            .insert(Edge::Variable)
             .insert(Edge::Filename)
-            .with_func(|state, out, [_, _, filename]| {
-                dbg!(filename);
-                todo!();
-                // match load_relation(filename, &mut state.locals) {
-                //     Ok(name) => writeln!(
-                //         out,
-                //         "Relation '{name}' loaded successfully from '{filename}'"
-                //     )?,
-                //     Err(e) => writeln!(out, "Error loading relation: {e}")?,
-                // }
-                // Ok(ops::ControlFlow::Continue(()))
+            .with_func(|state, out, [_, _, variable, filename]| {
+                let input = fs::read_to_string(filename)?;
+                match parse_relation(&input) {
+                    Ok((name, rel)) => match state.set_relation(variable, &rel) {
+                        Ok(()) => writeln!(
+                            out,
+                            "Relation '{name}' loaded successfully from '{filename}'"
+                        )?,
+                        Err(e) => writeln!(out, "Error assigning variable: {e}")?,
+                    },
+                    Err(e) => writeln!(out, "Error parsing relation from file '{filename}': {e}")?,
+                }
+                Ok(ops::ControlFlow::Continue(()))
             });
         load.insert(Edge::Keyword("mat"))
+            .insert(Edge::Variable)
             .insert(Edge::Filename)
-            .with_func(|state, out, [_, _, filename]| {
-                dbg!(filename);
-                todo!();
-                // match load_matrix(filename, &mut state.locals) {
-                //     Ok(name) => {
-                //         writeln!(out, "Matrix '{name}' loaded successfully from '{filename}'")?
-                //     }
-                //     Err(e) => writeln!(out, "Error loading matrix: {e}")?,
-                // }
-                // Ok(ops::ControlFlow::Continue(()))
+            .with_func(|state, out, [_, _, variable, filename]| {
+                let input = fs::read_to_string(filename)?;
+                match parse_matrix(&input) {
+                    Ok(rel) => match state.set_relation(variable, &rel) {
+                        Ok(()) => writeln!(
+                            out,
+                            "Matrix '{variable}' loaded successfully from '{filename}'"
+                        )?,
+                        Err(e) => writeln!(out, "Error assigning variable: {e}")?,
+                    },
+                    Err(e) => writeln!(out, "Error parsing matrix from file '{filename}': {e}")?,
+                }
+                Ok(ops::ControlFlow::Continue(()))
             });
 
         let save = root.insert(Edge::Keyword(".save"));
@@ -82,25 +92,31 @@ impl Node {
             .insert(Edge::Variable)
             .insert(Edge::Filename)
             .with_func(|state, out, [_, _, variable, filename]| {
-                dbg!(variable, filename);
-                todo!();
-                // match save_relation(&state.locals, variable, filename) {
-                //     Ok(()) => writeln!(out, "Relation '{variable}' saved to '{filename}'")?,
-                //     Err(e) => writeln!(out, "Error saving relation: {e}")?,
-                // }
-                // Ok(ops::ControlFlow::Continue(()))
+                let Some(rel) = state.relation(variable) else {
+                    writeln!(out, "Relation '{variable}' not found")?;
+                    return Ok(ops::ControlFlow::Continue(()));
+                };
+                fs::write(filename, rel.display(variable).to_string())?;
+                writeln!(
+                    out,
+                    "Relation '{variable}' saved successfully to '{filename}'"
+                )?;
+                Ok(ops::ControlFlow::Continue(()))
             });
         save.insert(Edge::Keyword("mat"))
             .insert(Edge::Variable)
             .insert(Edge::Filename)
             .with_func(|state, out, [_, _, variable, filename]| {
-                dbg!(variable, filename);
-                todo!();
-                // match save_matrix(&state.locals, variable, filename) {
-                //     Ok(()) => writeln!(out, "Matrix '{variable}' saved to '{filename}'")?,
-                //     Err(e) => writeln!(out, "Error saving matrix: {e}")?,
-                // }
-                // Ok(ops::ControlFlow::Continue(()))
+                let Some(rel) = state.relation(variable) else {
+                    writeln!(out, "Relation '{variable}' not found")?;
+                    return Ok(ops::ControlFlow::Continue(()));
+                };
+                fs::write(filename, rel.display_matrix().to_string())?;
+                writeln!(
+                    out,
+                    "Matrix '{variable}' saved successfully to '{filename}'"
+                )?;
+                Ok(ops::ControlFlow::Continue(()))
             });
 
         root

@@ -150,15 +150,15 @@ impl LuaState {
     }
 
     /// Gets a relation variable by its name.
-    pub fn relation(&self, name: &str) -> Result<Relation, Error> {
+    pub fn relation(&self, name: &str) -> Option<Relation> {
         let c_name = CString::new(name).expect("name contains null byte");
 
         let ptr = unsafe { ffi::kure_lua_get_rel_copy(self.ptr, c_name.as_ptr()) };
         if ptr.is_null() {
-            return Err("Relation not found".into());
+            return None;
         }
 
-        Ok(Relation {
+        Some(Relation {
             ptr,
             ctx: self.ctx.clone(),
         })
@@ -168,12 +168,9 @@ impl LuaState {
     pub fn set_relation(&mut self, name: &str, rel: &Relation) -> Result<(), Error> {
         let c_name = CString::new(name).expect("name contains null byte");
 
-        let mut error_ptr = ptr::null_mut();
         let success = unsafe { ffi::kure_lua_set_rel_copy(self.ptr, c_name.as_ptr(), rel.ptr) };
         if success == 0 {
-            let error = unsafe { Error::from_ffi(error_ptr) };
-            unsafe { ffi::kure_error_destroy(error_ptr) };
-            return Err(error);
+            return Err("Failed to set variable".into());
         }
 
         Ok(())
@@ -378,7 +375,9 @@ mod tests {
         let mut state = LuaState::new();
         let rel = Relation::identity_i32(3);
 
-        state.relation("R").unwrap_err();
+        let result = state.relation("R");
+
+        assert!(result.is_none());
     }
 
     #[test]

@@ -1,8 +1,7 @@
 use std::{cell::RefCell, io, ops, rc::Rc};
 
-use kure2::lang::LuaState;
 use kure2_cli::{Repl, repl_helper::ReplHelper};
-use rustyline::{Editor, error::ReadlineError, history::DefaultHistory};
+use rustyline::{Editor, error::ReadlineError};
 
 fn main() -> io::Result<()> {
     let mut rl = Editor::new().unwrap();
