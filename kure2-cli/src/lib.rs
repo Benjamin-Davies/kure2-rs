@@ -38,7 +38,7 @@ impl Repl {
         } else if line.starts_with('.') {
             self.process_command(line, &mut out)
         } else if let Some((var, expr)) = line.split_once('=') {
-            let result = self.state.assign(var, expr);
+            let result = self.state.assign(var.trim(), expr.trim());
             match result {
                 Ok(()) => {}
                 Err(e) => writeln!(out, "Error: {e}")?,
