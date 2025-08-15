@@ -2,7 +2,7 @@ use std::{collections::BTreeMap, fs, io, ops};
 
 use kure2::{
     fmt::{parse_matrix, parse_relation},
-    lang::LuaState,
+    lang::State,
 };
 
 const HELP_MESSAGE: &str = "Available commands:\n\
@@ -19,7 +19,7 @@ const HELP_MESSAGE: &str = "Available commands:\n\
 pub struct Node {
     pub edges: BTreeMap<Edge, Node>,
     pub func: Option<
-        Box<dyn Fn(&mut LuaState, &mut dyn io::Write, &[&str]) -> io::Result<ops::ControlFlow<()>>>,
+        Box<dyn Fn(&mut State, &mut dyn io::Write, &[&str]) -> io::Result<ops::ControlFlow<()>>>,
     >,
 }
 
@@ -128,7 +128,7 @@ impl Node {
 
     fn with_func<const N: usize>(
         &mut self,
-        func: impl Fn(&mut LuaState, &mut dyn io::Write, [&str; N]) -> io::Result<ops::ControlFlow<()>>
+        func: impl Fn(&mut State, &mut dyn io::Write, [&str; N]) -> io::Result<ops::ControlFlow<()>>
         + 'static,
     ) {
         self.func = Some(Box::new(move |state, out, args| {

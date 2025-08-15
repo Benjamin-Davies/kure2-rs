@@ -1,7 +1,7 @@
 //! Formatting and parsing for [`Relation`].
 //!
-//! This functionality is not a part of kure2, but we implemented it for compatibility with other
-//! kure2 front-ends.
+//! This functionality is not a part of kure2, but it is implemented here for compatibility with
+//! other kure2 front-ends.
 
 use std::fmt;
 

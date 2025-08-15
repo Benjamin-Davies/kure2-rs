@@ -1,6 +1,6 @@
 use std::{io, ops};
 
-use kure2::lang::LuaState;
+use kure2::lang::State;
 
 use crate::commands::Node;
 
@@ -11,14 +11,14 @@ const WELCOME_MESSAGE: &str = "Welcome to the kure2-rs REPL! Type '.help' for as
 
 pub struct Repl {
     pub commands: Node,
-    pub state: LuaState,
+    pub state: State,
 }
 
 impl Repl {
     pub fn new() -> Self {
         Self {
             commands: Node::root(),
-            state: LuaState::new(),
+            state: State::new(),
         }
     }
 

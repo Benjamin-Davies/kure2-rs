@@ -30,18 +30,18 @@ pub trait ParserObserver {
 }
 
 /// State for the Kure-Lua bindings and the embedded language.
-pub struct LuaState {
+pub struct State {
     ptr: *mut lua_ffi::lua_State,
     ctx: Context,
 }
 
-impl LuaState {
-    /// Creates a new [`LuaState`] which can be used with the Kure-Lua bindings and the embedded language.
+impl State {
+    /// Creates a new [`State`] which can be used with the Kure-Lua bindings and the embedded language.
     pub fn new() -> Self {
-        LuaState::with_context(context().clone())
+        State::with_context(context().clone())
     }
 
-    /// Creates a new [`LuaState`] which can be used with the Kure-Lua binding and the embedded language in the given [`Context`].
+    /// Creates a new [`State`] which can be used with the Kure-Lua binding and the embedded language in the given [`Context`].
     pub fn with_context(ctx: Context) -> Self {
         let _lock: MutexGuard<()> = GLOBAL_INTERPRETER_LOCK.lock().unwrap();
 
@@ -49,7 +49,7 @@ impl LuaState {
         if ptr.is_null() {
             ctx.panic_with_error();
         }
-        LuaState { ptr, ctx }
+        State { ptr, ctx }
     }
 
     /// Returns the context associated with this Lua state.
@@ -57,7 +57,7 @@ impl LuaState {
         &self.ctx
     }
 
-    /// Similar to [`LuaState::exec`], but stores the result in a global Lua variable of the given name.
+    /// Similar to [`State::exec`], but stores the result in a global Lua variable of the given name.
     /// If the global variable is non-NULL it is overwritten. If the call fails, the global Lua
     /// variable remains unchanged.
     pub fn assign(&mut self, var: &str, expr: &str) -> Result<(), Error> {
@@ -147,7 +147,7 @@ impl LuaState {
         Ok(())
     }
 
-    /// Loads the contents of the given file using [`LuaState::load`].
+    /// Loads the contents of the given file using [`State::load`].
     pub fn load_file(&mut self, file: &str) -> Result<(), Error> {
         let _lock: MutexGuard<()> = GLOBAL_INTERPRETER_LOCK.lock().unwrap();
 
@@ -197,13 +197,13 @@ impl LuaState {
     }
 }
 
-impl Default for LuaState {
+impl Default for State {
     fn default() -> Self {
-        LuaState::new()
+        State::new()
     }
 }
 
-impl Drop for LuaState {
+impl Drop for State {
     fn drop(&mut self) {
         unsafe { ffi::kure_lua_destroy(self.ptr) };
     }
@@ -331,18 +331,18 @@ fn make_ffi_observer<O: ParserObserver>(observer: &mut O) -> ffi::KureParserObse
 mod tests {
     use crate::{
         Relation,
-        lang::{self, LuaState, ParserObserver},
+        lang::{self, ParserObserver, State},
     };
 
     #[test]
-    fn test_create_destroy_lua_state() {
-        let lua_state = LuaState::new();
+    fn test_create_destroy_state() {
+        let lua_state = State::new();
         drop(lua_state);
     }
 
     #[test]
     fn test_exec() {
-        let mut state = LuaState::new();
+        let mut state = State::new();
 
         let result = state.exec("TRUE()").unwrap();
 
@@ -351,7 +351,7 @@ mod tests {
 
     #[test]
     fn test_assign() {
-        let mut state = LuaState::new();
+        let mut state = State::new();
 
         state.assign("R", "TRUE()").unwrap();
 
@@ -361,7 +361,7 @@ mod tests {
 
     #[test]
     fn test_exec_lua() {
-        let mut state = LuaState::new();
+        let mut state = State::new();
 
         let result = state.exec_lua("return kure.compat.TRUE()").unwrap();
 
@@ -370,7 +370,7 @@ mod tests {
 
     #[test]
     fn test_load() {
-        let mut state = LuaState::new();
+        let mut state = State::new();
         let prog = include_str!("../../kure2-sys/kure2-2.2/data/programs/DFS.prog");
 
         state.load(prog).unwrap();
@@ -381,7 +381,7 @@ mod tests {
 
     #[test]
     fn test_load_file() {
-        let mut state = LuaState::new();
+        let mut state = State::new();
         let file = "../kure2-sys/kure2-2.2/data/programs/DFS.prog";
 
         state.load_file(file).unwrap();
@@ -392,7 +392,7 @@ mod tests {
 
     #[test]
     fn test_get_relation_not_found() {
-        let state = LuaState::new();
+        let state = State::new();
 
         let result = state.relation("R");
 
@@ -401,7 +401,7 @@ mod tests {
 
     #[test]
     fn test_get_set_relation() {
-        let mut state = LuaState::new();
+        let mut state = State::new();
         let rel = Relation::identity_i32(3);
 
         state.set_relation("R", &rel).unwrap();

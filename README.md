@@ -13,7 +13,7 @@ To download `kure2-cli`, run:
 cargo install --git https://github.com/Benjamin-Davies/kure2-rs.git
 ```
 
-You can then launch the REPL by running `kure2` in your terminal.
+You can then launch the REPL by running `kure` in your terminal.
 
 The REPL also support various commands (starting with a `.`) to help with loading and saving programs and relations.
 
