@@ -19,3 +19,6 @@ The REPL also support various commands (starting with a `.`) to help with loadin
 
 ## Library
 Using the `kure2` crate should be straightforward. You can create a relation using the `Relation` struct. You can also execute DSL code using an instance of the `lang::State` struct.
+
+# Licensing
+The crates in this repository are licensed under the [MIT License](https://choosealicense.com/licenses/mit/), except for those that directly or indirectly dependent on Kure, which are licensed under [GNU GPLv3](https://choosealicense.com/licenses/gpl-3.0/). The vendored C libraries (Cudd, Kure and Lua), and any patches I have made to them, are licensed under the same license as the original libraries (i.e. BSD 3-Clause, GPLv3 and MIT, respectively).
