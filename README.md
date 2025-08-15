@@ -10,7 +10,7 @@ To use kure2-rs, you must have the [Rust toolchain](https://www.rust-lang.org/to
 To download `kure2-cli`, run:
 
 ```sh
-cargo install --git https://github.com/Benjamin-Davies/kure2-rs.git
+cargo install kure2-cli
 ```
 
 You can then launch the REPL by running `kure` in your terminal.
