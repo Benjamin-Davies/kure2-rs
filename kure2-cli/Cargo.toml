@@ -2,6 +2,10 @@
 name = "kure2-cli"
 version = "0.1.0"
 edition = "2024"
+description = "REPL for the Kure2 DSL"
+readme = "../README.md"
+repository = "https://github.com/Benjamin-Davies/kure2-rs"
+license = "GPL-3.0"
 
 [[bin]]
 name = "kure"

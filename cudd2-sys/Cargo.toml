@@ -2,6 +2,10 @@
 name = "cudd2-sys"
 version = "0.1.0"
 edition = "2021"
+description = "FFI bindings for CUDD, a C library for the manipulation of decision diagrams"
+readme = "../README.md"
+repository = "https://github.com/Benjamin-Davies/kure2-rs"
+license = "MIT"
 
 links = "cudd"
 
