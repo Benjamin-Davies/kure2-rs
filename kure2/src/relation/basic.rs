@@ -1,4 +1,4 @@
-use std::ops;
+use std::{ffi::c_char, ops};
 
 use kure2_sys as ffi;
 
@@ -81,7 +81,7 @@ impl Relation {
         let success = unsafe {
             ffi::kure_set_bit(
                 self.ptr,
-                value as i8,
+                value as c_char,
                 row.as_raw() as *mut _,
                 col.as_raw() as *mut _,
             )
@@ -93,7 +93,7 @@ impl Relation {
 
     /// Sets a given bit to true or false.
     pub fn set_bit_i32(&mut self, row: i32, col: i32, value: bool) {
-        let success = unsafe { ffi::kure_set_bit_si(self.ptr, value as i8, row, col) };
+        let success = unsafe { ffi::kure_set_bit_si(self.ptr, value as c_char, row, col) };
         if success == 0 {
             self.ctx.panic_with_error();
         }

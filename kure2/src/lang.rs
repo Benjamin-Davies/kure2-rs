@@ -1,7 +1,7 @@
 //! The Kure-Lua bindings and the embedded language.
 
 use std::{
-    ffi::{CStr, CString, c_void},
+    ffi::{CStr, CString, c_char, c_void},
     ptr,
     sync::{Mutex, MutexGuard},
 };
@@ -286,9 +286,9 @@ fn make_ffi_observer<O: ParserObserver>(observer: &mut O) -> ffi::KureParserObse
 
     unsafe extern "C" fn on_function<O: ParserObserver>(
         object: *mut c_void,
-        c_original_code: *const i8,
-        c_lua_code: *const i8,
-    ) -> i8 {
+        c_original_code: *const c_char,
+        c_lua_code: *const c_char,
+    ) -> c_char {
         let observer = unsafe { &mut *(object as StateObject<O>) };
         let original_code = unsafe { CStr::from_ptr(c_original_code) }
             .to_str()
@@ -299,14 +299,14 @@ fn make_ffi_observer<O: ParserObserver>(observer: &mut O) -> ffi::KureParserObse
 
         let result = observer.on_function(original_code, lua_code);
 
-        result as i8
+        result as c_char
     }
 
     unsafe extern "C" fn on_program<O: ParserObserver>(
         object: *mut c_void,
-        c_original_code: *const i8,
-        c_lua_code: *const i8,
-    ) -> i8 {
+        c_original_code: *const c_char,
+        c_lua_code: *const c_char,
+    ) -> c_char {
         let observer = unsafe { &mut *(object as StateObject<O>) };
         let original_code = unsafe { CStr::from_ptr(c_original_code) }
             .to_str()
@@ -317,7 +317,7 @@ fn make_ffi_observer<O: ParserObserver>(observer: &mut O) -> ffi::KureParserObse
 
         let result = observer.on_program(original_code, lua_code);
 
-        result as i8
+        result as c_char
     }
 
     ffi::KureParserObserver {
