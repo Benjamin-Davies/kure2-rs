@@ -14,7 +14,6 @@ cudd2-sys = { workspace = true }
 gmp-mpfr-sys = { workspace = true }
 kure2-lua-sys = { workspace = true }
 libc = { workspace = true }
-va_list = { workspace = true }
 
 [build-dependencies]
 bindgen = { workspace = true }

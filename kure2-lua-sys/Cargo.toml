@@ -11,7 +11,6 @@ links = "kure2-lua"
 
 [dependencies]
 libc = { workspace = true }
-va_list = { workspace = true }
 
 [build-dependencies]
 bindgen = { workspace = true }

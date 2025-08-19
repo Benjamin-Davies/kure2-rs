@@ -36,7 +36,8 @@ fn main() {
     assert!(status.success());
 
     let bindings = bindgen::Builder::default()
-        .header(build_dir.join("include/Kure.h").to_str().unwrap())
+        .header("wrapper.h")
+        .clang_arg(format!("-I{}", build_dir.join("include").display()))
         .clang_arg(format!("-I{}", cudd_dir.join("include").display()))
         .clang_arg(format!("-I{}", gmp_dir.join("include").display()))
         .clang_arg(format!("-I{}", lua_dir.join("include").display()))

@@ -29,7 +29,8 @@ fn main() {
     }
 
     let bindings = bindgen::Builder::default()
-        .header(build_dir.join("include/lua.h").to_str().unwrap())
+        .header("wrapper.h")
+        .clang_arg(format!("-I{}", build_dir.join("include").display()))
         .blocklist_file(".*/usr/.*")
         .generate()
         .unwrap();
