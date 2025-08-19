@@ -56,7 +56,16 @@ impl ReplHelper {
         }
 
         if node.edges.contains_key(&Edge::Variable) {
-            // TODO: Autocomplete variable names.
+            let variables = repl.state.list_relations();
+            suggestions.extend(
+                variables
+                    .into_iter()
+                    .filter(|v| v.starts_with(last_part))
+                    .map(|v| Pair {
+                        display: v.clone(),
+                        replacement: v,
+                    }),
+            );
         }
 
         suggestions.sort_by(|a, b| a.display.cmp(&b.display));

@@ -6,10 +6,13 @@ use std::{
     sync::{Mutex, MutexGuard},
 };
 
-use kure2_lua_sys as lua_ffi;
+use kure2_lua_sys::{self as lua_ffi, lua_next};
 use kure2_sys as ffi;
 
 use crate::{Context, Error, Relation, context};
+
+/// List of functions that are available but not user defined.
+const EXCLUDE_FNS: &[&str] = &["bool_to_rel"];
 
 /// Lua does not seem to like running on multiple threads at the same time, so we use a global lock.
 static GLOBAL_INTERPRETER_LOCK: Mutex<()> = Mutex::new(());
@@ -194,6 +197,66 @@ impl State {
         }
 
         Ok(())
+    }
+
+    /// Lists all relation variables that are accessible by the embedded language.
+    pub fn list_relations(&self) -> Vec<String> {
+        let _lock: MutexGuard<()> = GLOBAL_INTERPRETER_LOCK.lock().unwrap();
+
+        let mut keys = Vec::new();
+        unsafe { lua_ffi::lua_pushnil(self.ptr) };
+        loop {
+            let has_next = unsafe { lua_next(self.ptr, lua_ffi::LUA_GLOBALSINDEX) } != 0;
+            if !has_next {
+                break;
+            }
+
+            let key_is_string = unsafe { lua_ffi::lua_isstring(self.ptr, -2) } != 0;
+            let is_rel = unsafe { ffi::kure_lua_isrel(self.ptr, -1) } != 0;
+            if key_is_string && is_rel {
+                let c_key = unsafe { lua_ffi::lua_tolstring(self.ptr, -2, ptr::null_mut()) };
+                let key = unsafe { CStr::from_ptr(c_key) }
+                    .to_str()
+                    .expect("key is not valid UTF-8")
+                    .to_owned();
+                keys.push(key);
+            }
+
+            unsafe { lua_ffi::lua_pop(self.ptr, 1) };
+        }
+        keys
+    }
+
+    /// Lists all user-defined programs and functions that are accessible by the
+    /// embedded language.
+    pub fn list_programs(&self) -> Vec<String> {
+        let _lock: MutexGuard<()> = GLOBAL_INTERPRETER_LOCK.lock().unwrap();
+
+        let mut keys = Vec::new();
+        unsafe { lua_ffi::lua_pushnil(self.ptr) };
+        loop {
+            let has_next = unsafe { lua_next(self.ptr, lua_ffi::LUA_GLOBALSINDEX) } != 0;
+            if !has_next {
+                break;
+            }
+
+            let key_is_string = unsafe { lua_ffi::lua_isstring(self.ptr, -2) } != 0;
+            let is_fn = unsafe { lua_ffi::lua_type(self.ptr, -1) } == lua_ffi::LUA_TFUNCTION as i32;
+            let is_c_fn = unsafe { lua_ffi::lua_iscfunction(self.ptr, -1) } != 0;
+            if key_is_string && is_fn && !is_c_fn {
+                let c_key = unsafe { lua_ffi::lua_tolstring(self.ptr, -2, ptr::null_mut()) };
+                let key = unsafe { CStr::from_ptr(c_key) }
+                    .to_str()
+                    .expect("key is not valid UTF-8")
+                    .to_owned();
+                if !EXCLUDE_FNS.contains(&key.as_str()) {
+                    keys.push(key);
+                }
+            }
+
+            unsafe { lua_ffi::lua_pop(self.ptr, 1) };
+        }
+        keys
     }
 }
 
@@ -479,5 +542,30 @@ mod tests {
         assert_eq!(observer.programs.len(), 3);
         assert!(observer.programs[0].0.starts_with("randompoint(v)"));
         assert!(observer.programs[0].1.starts_with("function randompoint"));
+    }
+
+    #[test]
+    fn test_list_relations() {
+        let mut state = State::new();
+        state.assign("R", "true()").unwrap();
+        state.assign("S", "false()").unwrap();
+
+        let vars = state.list_relations();
+
+        assert!(vars.contains(&"R".to_owned()));
+        assert!(vars.contains(&"S".to_owned()));
+    }
+
+    #[test]
+    fn test_list_programs() {
+        let mut state = State::new();
+        let file = "../kure2-sys/kure2-2.2/data/programs/DFS.prog";
+        state.load_file(file).unwrap();
+
+        let progs = state.list_programs();
+
+        assert_eq!(progs.len(), 2);
+        assert!(progs.contains(&"Dfs".to_owned()));
+        assert!(progs.contains(&"ReachDfs".to_owned()));
     }
 }
