@@ -1,6 +1,6 @@
 [package]
 name = "kure2-lua-sys"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description = "FFI bindings for Lua, intended to be used with kure2-sys"
 readme = "../README.md"
