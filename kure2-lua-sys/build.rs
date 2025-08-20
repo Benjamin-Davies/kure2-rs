@@ -10,6 +10,7 @@ fn main() {
     let pc_file = out_dir.join("lua.pc");
 
     println!("cargo:rerun-if-changed=build.rs");
+    println!("cargo:rerun-if-changed=wrapper.h");
     println!("cargo:rerun-if-changed={}", src_dir.display());
 
     fs_extra::copy_items(&[&src_dir], &out_dir, &CopyOptions::new().overwrite(true)).unwrap();

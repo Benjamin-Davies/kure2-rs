@@ -175,7 +175,8 @@ static YYSTYPE yyval_default;
    * adapts the call, so Kure can serve it. The compatible tier is implemented
    * in Lua and is precomplied at build time. See src/kure_compat.lua. The
    * random functions are treated in a special way. See \ref map_fun below. */
-  static struct fun_map_t {
+   #define fun_map kure_fun_map
+   struct fun_map_t {
     char * name;
     int arg_count;
     char * transl_name;

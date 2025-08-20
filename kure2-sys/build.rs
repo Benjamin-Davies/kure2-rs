@@ -9,6 +9,7 @@ fn main() {
     let build_dir = out_dir.join("kure2-2.2");
 
     println!("cargo:rerun-if-changed=build.rs");
+    println!("cargo:rerun-if-changed=wrapper.h");
     println!("cargo:rerun-if-changed={}", src_dir.display());
 
     let cudd_dir: PathBuf = std::env::var("DEP_CUDD_DIR").unwrap().into();

@@ -390,11 +390,33 @@ fn make_ffi_observer<O: ParserObserver>(observer: &mut O) -> ffi::KureParserObse
     }
 }
 
+/// Lists all of the built-in functions that are available in the embedded language.
+pub fn list_builtins() -> Vec<String> {
+    let fun_map = &raw const ffi::kure_fun_map as *const ffi::kure_fun_map_t;
+
+    let mut builtins = Vec::new();
+    for i in 0.. {
+        let fun = unsafe { *fun_map.add(i) };
+        if fun.name.is_null() {
+            break;
+        }
+
+        let c_name = unsafe { CStr::from_ptr(fun.name) };
+        let name = c_name
+            .to_str()
+            .expect("function name is not valid UTF-8")
+            .to_owned();
+        builtins.push(name);
+    }
+
+    builtins
+}
+
 #[cfg(test)]
 mod tests {
     use crate::{
         Relation,
-        lang::{self, ParserObserver, State},
+        lang::{self, ParserObserver, State, list_builtins},
     };
 
     #[test]
@@ -567,5 +589,14 @@ mod tests {
         assert_eq!(progs.len(), 2);
         assert!(progs.contains(&"Dfs".to_owned()));
         assert!(progs.contains(&"ReachDfs".to_owned()));
+    }
+
+    #[test]
+    fn test_list_builtins() {
+        let builtins = list_builtins();
+
+        assert_eq!(builtins.len(), 50);
+        assert!(builtins.contains(&"L".to_owned()));
+        assert!(builtins.contains(&"point".to_owned()));
     }
 }

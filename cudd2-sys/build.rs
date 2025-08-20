@@ -9,6 +9,7 @@ fn main() {
     let build_dir = out_dir.join("cudd-cudd-2.5.1");
 
     println!("cargo:rerun-if-changed=build.rs");
+    println!("cargo:rerun-if-changed=wrapper.h");
     println!("cargo:rerun-if-changed={}", src_dir.display());
 
     fs_extra::copy_items(&[&src_dir], &out_dir, &CopyOptions::new().overwrite(true)).unwrap();
