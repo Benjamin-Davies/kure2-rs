@@ -1,5 +1,6 @@
 use std::{cell::RefCell, rc::Rc};
 
+use kure2::lang;
 use rustyline::{
     Helper, Result,
     completion::{Completer, FilenameCompleter, Pair},
@@ -71,6 +72,33 @@ impl ReplHelper {
         suggestions.sort_by(|a, b| a.display.cmp(&b.display));
         Ok((last_part_start, suggestions))
     }
+
+    fn complete_statement(&self, line: &str, pos: usize) -> Result<(usize, Vec<Pair>)> {
+        let mut word_start = pos;
+        while let Some(c) = line[..word_start]
+            .chars()
+            .last()
+            .filter(|&c| c.is_alphanumeric() || "-_".contains(c))
+        {
+            word_start -= c.len_utf8();
+        }
+        let prefix = &line[word_start..pos];
+
+        let repl = self.repl.borrow();
+        let mut suggestions = lang::list_builtins()
+            .into_iter()
+            .chain(repl.state.list_programs())
+            .chain(repl.state.list_relations())
+            .filter(|a| a.starts_with(prefix))
+            .map(|a| Pair {
+                display: a.clone(),
+                replacement: a,
+            })
+            .collect::<Vec<_>>();
+        suggestions.sort_by_key(|a| a.replacement.clone());
+
+        Ok((word_start, suggestions))
+    }
 }
 
 impl Completer for ReplHelper {
@@ -85,8 +113,7 @@ impl Completer for ReplHelper {
         if line.starts_with('.') {
             self.complete_command(line, pos)
         } else {
-            // TODO: Handle variable/function name completion
-            Ok((0, Vec::new()))
+            self.complete_statement(line, pos)
         }
     }
 }
