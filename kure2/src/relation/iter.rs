@@ -1,6 +1,6 @@
 use std::ops::Range;
 
-use cudd2::DdNodeRef;
+use cudd2::{DdHalfWord, DdNodeRef};
 use rug::Integer;
 
 use crate::Relation;
@@ -12,7 +12,7 @@ pub struct Iter<'a> {
 #[derive(Debug)]
 struct State<'a> {
     node: DdNodeRef<'a>,
-    index: u16,
+    index: DdHalfWord,
     min_i: Integer,
     max_i: Integer,
     min_j: Integer,

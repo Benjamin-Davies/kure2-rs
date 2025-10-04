@@ -24,6 +24,10 @@ fn main() {
         .header("wrapper.h")
         .clang_arg(format!("-I{}", build_dir.join("include").display()))
         .blocklist_file(".*/usr/.*")
+        .blocklist_type(".*HalfWord")
+        .blocklist_type("DdNode.*")
+        .blocklist_item("Mtr.*")
+        .blocklist_item("Cudd.*Tree.*")
         .generate()
         .unwrap();
 

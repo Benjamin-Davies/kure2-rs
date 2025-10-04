@@ -1,8 +1,8 @@
 use std::{fmt, marker::PhantomData, ops};
 
-use cudd2_sys as ffi;
+use cudd2_sys::{self as ffi, CUDD_CONST_INDEX};
 
-pub const CUDD_CONST_INDEX: u16 = u16::MAX;
+pub use cudd2_sys::DdHalfWord;
 
 #[derive(Clone, Copy)]
 pub struct DdNodeRef<'a> {
@@ -37,7 +37,7 @@ impl<'a> DdNodeRef<'a> {
         unsafe { &*regular.ptr }
     }
 
-    pub fn index(&self) -> u16 {
+    pub fn index(&self) -> DdHalfWord {
         self.inner().index
     }
 
