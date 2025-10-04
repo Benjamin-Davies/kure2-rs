@@ -92,21 +92,23 @@ impl fmt::Display for DisplayMatrix<'_> {
     }
 }
 
-impl fmt::Debug for Display<'_> {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        fmt::Display::fmt(self, f)
-    }
-}
-
-impl fmt::Display for Relation {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        fmt::Display::fmt(&self.display("Relation"), f)
-    }
-}
-
 impl fmt::Debug for Relation {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        fmt::Display::fmt(self, f)
+        struct Pair(i32, i32);
+        impl fmt::Debug for Pair {
+            fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+                write!(f, "({}, {})", self.0, self.1)
+            }
+        }
+
+        write!(f, "Relation ({}, {}) ", self.rows_i32(), self.cols_i32())?;
+        f.debug_set()
+            .entries(
+                (0..self.rows_i32())
+                    .flat_map(|i| (0..self.cols_i32()).map(move |j| Pair(i, j)))
+                    .filter(move |&Pair(i, j)| self.bit_i32(i, j)),
+            )
+            .finish()
     }
 }
 
@@ -197,7 +199,7 @@ mod tests {
         let mut rel = Relation::identity_i32(3);
         rel.set_bit_i32(0, 2, true);
 
-        let result = rel.to_string();
+        let result = rel.display("Relation").to_string();
 
         assert_eq!(result, "Relation (3, 3)\n1 : 1, 3\n2 : 2\n3 : 3\n");
     }
@@ -210,6 +212,29 @@ mod tests {
         let result = rel.display_matrix().to_string();
 
         assert_eq!(result, "+---+\n|X X|\n| X |\n|  X|\n+---+\n");
+    }
+
+    #[test]
+    fn test_debug() {
+        let mut rel = Relation::identity_i32(3);
+        rel.set_bit_i32(0, 2, true);
+
+        let result = format!("{rel:?}");
+
+        assert_eq!(result, "Relation (3, 3) {(0, 0), (0, 2), (1, 1), (2, 2)}");
+    }
+
+    #[test]
+    fn test_debug_pretty() {
+        let mut rel = Relation::identity_i32(3);
+        rel.set_bit_i32(0, 2, true);
+
+        let result = format!("{rel:#?}");
+
+        assert_eq!(
+            result,
+            "Relation (3, 3) {\n    (0, 0),\n    (0, 2),\n    (1, 1),\n    (2, 2),\n}"
+        );
     }
 
     #[test]
