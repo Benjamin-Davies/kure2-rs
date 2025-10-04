@@ -98,6 +98,16 @@ impl Relation {
             self.ctx.panic_with_error();
         }
     }
+
+    /// Computes the transpose of the relation.
+    pub fn transpose(&self) -> Self {
+        let result = Self::empty_with_context(self.ctx.clone(), &self.cols(), &self.rows());
+        let success = unsafe { ffi::kure_transpose(result.ptr, self.ptr) };
+        if success == 0 {
+            self.ctx.panic_with_error();
+        }
+        result
+    }
 }
 
 impl PartialEq for Relation {
@@ -145,6 +155,19 @@ impl ops::BitAnd for Relation {
     fn bitand(self, rhs: Self) -> Self::Output {
         let result = Self::empty_with_context(self.ctx.clone(), &self.rows(), &self.cols());
         let success = unsafe { ffi::kure_and(result.ptr, self.ptr, rhs.ptr) };
+        if success == 0 {
+            self.ctx.panic_with_error();
+        }
+        result
+    }
+}
+
+impl ops::Mul for Relation {
+    type Output = Self;
+
+    fn mul(self, rhs: Self) -> Self::Output {
+        let result = Self::empty_with_context(self.ctx.clone(), &self.rows(), &rhs.cols());
+        let success = unsafe { ffi::kure_mult(result.ptr, self.ptr, rhs.ptr) };
         if success == 0 {
             self.ctx.panic_with_error();
         }
