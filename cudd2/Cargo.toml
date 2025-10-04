@@ -1,0 +1,11 @@
+[package]
+name = "cudd2"
+version = "0.1.0"
+edition = "2024"
+description = "Safe bindings for Kure2, a C library for the manipulation of decision diagrams"
+readme = "../README.md"
+repository = "https://github.com/Benjamin-Davies/kure2-rs"
+license = "GPL-3.0"
+
+[dependencies]
+cudd2-sys = { workspace = true }

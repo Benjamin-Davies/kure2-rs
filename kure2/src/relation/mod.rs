@@ -1,9 +1,11 @@
+use cudd2::DdNodeRef;
 use kure2_sys as ffi;
 
 use crate::{Context, context};
 
 mod basic;
 pub mod fmt;
+pub mod iter;
 
 /// A relation, represented using a binary decision diagram (BDD).
 pub struct Relation {
@@ -118,6 +120,12 @@ impl Relation {
         if success == 0 {
             self.ctx.panic_with_error();
         }
+    }
+
+    /// Returns the underlying CUDD BDD node.
+    pub fn dd_node(&self) -> DdNodeRef<'_> {
+        let node = unsafe { ffi::kure_rel_get_bdd(self.ptr) };
+        unsafe { DdNodeRef::from_ptr(node) }
     }
 }
 

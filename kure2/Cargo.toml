@@ -8,6 +8,7 @@ repository = "https://github.com/Benjamin-Davies/kure2-rs"
 license = "GPL-3.0"
 
 [dependencies]
+cudd2 = { workspace = true }
 kure2-lua-sys = { workspace = true }
 kure2-sys = { workspace = true }
 rug = { workspace = true }

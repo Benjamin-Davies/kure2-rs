@@ -5,6 +5,8 @@
 
 use std::fmt;
 
+use rug::Integer;
+
 use crate::{Error, Relation};
 
 /// Temporary struct returned by [`Relation::display`].
@@ -35,23 +37,22 @@ impl Relation {
 
 impl fmt::Display for Display<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let name = self.name;
-        let rows = self.relation.rows_i32();
-        let cols = self.relation.cols_i32();
-        write!(f, "{name} ({rows}, {cols})")?;
+        write!(
+            f,
+            "{} ({}, {})",
+            self.name,
+            self.relation.rows(),
+            self.relation.cols(),
+        )?;
 
-        for i in 0..rows {
-            let mut last_i = -1;
-            for j in 0..cols {
-                if self.relation.bit_i32(i, j) {
-                    if i != last_i {
-                        write!(f, "\n{} : {}", i + 1, j + 1)?;
-                    } else {
-                        write!(f, ", {}", j + 1)?;
-                    }
-                    last_i = i;
-                }
+        let mut last_i = Integer::NEG_ONE.clone();
+        for (i, j) in self.relation.iter() {
+            if i != last_i {
+                write!(f, "\n{} : {}", i.clone() + 1, j + 1)?;
+            } else {
+                write!(f, ", {}", j + 1)?;
             }
+            last_i = i;
         }
         writeln!(f)?;
 
@@ -94,20 +95,16 @@ impl fmt::Display for DisplayMatrix<'_> {
 
 impl fmt::Debug for Relation {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        struct Pair(i32, i32);
+        struct Pair(Integer, Integer);
         impl fmt::Debug for Pair {
             fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
                 write!(f, "({}, {})", self.0, self.1)
             }
         }
 
-        write!(f, "Relation ({}, {}) ", self.rows_i32(), self.cols_i32())?;
+        write!(f, "Relation ({}, {}) ", self.rows(), self.cols())?;
         f.debug_set()
-            .entries(
-                (0..self.rows_i32())
-                    .flat_map(|i| (0..self.cols_i32()).map(move |j| Pair(i, j)))
-                    .filter(move |&Pair(i, j)| self.bit_i32(i, j)),
-            )
+            .entries(self.iter().map(|(i, j)| Pair(i, j)))
             .finish()
     }
 }
@@ -123,10 +120,13 @@ pub fn parse_relation(input: &str) -> Result<(&str, Relation), Error> {
     let cols = cols.trim().parse().map_err(|_| "Invalid column count")?;
     let rest = rest.trim_start();
 
-    let mut relation = Relation::empty_i32(rows, cols);
+    let mut relation = Relation::empty(&rows, &cols);
     for line in rest.lines() {
         let (i, rest) = line.split_once(':').ok_or("Missing `:`")?;
-        let i = i.trim().parse::<i32>().map_err(|_| "Invalid row index")?;
+        let i = i
+            .trim()
+            .parse::<Integer>()
+            .map_err(|_| "Invalid row index")?;
         if i < 1 || i > rows {
             return Err("Row index out of bounds".into());
         }
@@ -134,13 +134,13 @@ pub fn parse_relation(input: &str) -> Result<(&str, Relation), Error> {
         for j in rest.split(',') {
             let j = j
                 .trim()
-                .parse::<i32>()
+                .parse::<Integer>()
                 .map_err(|_| "Invalid column index")?;
             if j < 1 || j > cols {
                 return Err("Column index out of bounds".into());
             }
 
-            relation.set_bit_i32(i - 1, j - 1, true);
+            relation.set_bit(&(i.clone() - 1), &(j.clone() - 1), true);
         }
     }
 
@@ -189,6 +189,8 @@ pub fn parse_matrix(input: &str) -> Result<Relation, Error> {
 
 #[cfg(test)]
 mod tests {
+    use rug::Integer;
+
     use crate::{
         Relation,
         fmt::{parse_matrix, parse_relation},
@@ -256,5 +258,41 @@ mod tests {
         assert_eq!(relation.rows_i32(), 5);
         assert_eq!(relation.cols_i32(), 5);
         assert_eq!(relation.display_matrix().to_string(), input);
+    }
+
+    #[test]
+    fn test_display_large() {
+        let size = "1_000_000_000_000".parse::<Integer>().unwrap();
+        let mut rel = Relation::empty(&size, &size);
+        rel.set_bit(
+            &size.clone().div_exact_u(2),
+            &size.clone().div_exact_u(4),
+            true,
+        );
+
+        let result = rel.display("Relation").to_string();
+
+        assert_eq!(
+            result,
+            "Relation (1000000000000, 1000000000000)\n500000000001 : 250000000001\n"
+        );
+    }
+
+    #[test]
+    fn test_debug_large() {
+        let size = "1_000_000_000_000".parse::<Integer>().unwrap();
+        let mut rel = Relation::empty(&size, &size);
+        rel.set_bit(
+            &size.clone().div_exact_u(2),
+            &size.clone().div_exact_u(4),
+            true,
+        );
+
+        let result = format!("{rel:?}");
+
+        assert_eq!(
+            result,
+            "Relation (1000000000000, 1000000000000) {(500000000000, 250000000000)}"
+        );
     }
 }
