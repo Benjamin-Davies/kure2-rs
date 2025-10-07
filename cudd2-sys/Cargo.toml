@@ -1,6 +1,6 @@
 [package]
 name = "cudd2-sys"
-version = "0.1.2"
+version = "0.2.0"
 edition = "2021"
 description = "FFI bindings for CUDD, a C library for the manipulation of decision diagrams"
 readme = "../README.md"

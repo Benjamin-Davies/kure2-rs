@@ -1,6 +1,6 @@
 [package]
 name = "kure2"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2024"
 description = "Safe bindings for Kure2, a C library which provides manipulation of relations and operations of relation algebra"
 readme = "../README.md"

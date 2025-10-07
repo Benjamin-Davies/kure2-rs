@@ -86,7 +86,7 @@ dependencies = [
 
 [[package]]
 name = "cudd2-sys"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "bindgen",
  "fs_extra",
@@ -180,7 +180,7 @@ dependencies = [
 
 [[package]]
 name = "kure2"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "cudd2-sys",
  "kure2-lua-sys",
@@ -190,7 +190,7 @@ dependencies = [
 
 [[package]]
 name = "kure2-cli"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "kure2",
  "pretty_assertions",
@@ -208,7 +208,7 @@ dependencies = [
 
 [[package]]
 name = "kure2-sys"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "bindgen",
  "cudd2-sys",
