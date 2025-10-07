@@ -1,9 +1,9 @@
 use std::ops::Range;
 
-use cudd2::{DdHalfWord, DdNodeRef};
+use cudd2_sys::DdHalfWord;
 use rug::Integer;
 
-use crate::Relation;
+use crate::{Relation, dd::DdNodeRef};
 
 pub struct Iter<'a> {
     stack: Vec<State<'a>>,

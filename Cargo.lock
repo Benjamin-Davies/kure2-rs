@@ -85,13 +85,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "cudd2"
-version = "0.1.0"
-dependencies = [
- "cudd2-sys",
-]
-
-[[package]]
 name = "cudd2-sys"
 version = "0.1.2"
 dependencies = [
@@ -189,7 +182,7 @@ dependencies = [
 name = "kure2"
 version = "0.2.0"
 dependencies = [
- "cudd2",
+ "cudd2-sys",
  "kure2-lua-sys",
  "kure2-sys",
  "rug",
